@@ -1,18 +1,5 @@
-﻿#include <gl/glew.h>
-#include <gl/GLFW/glfw3.h>
-//#include <GL/GLM/glm.hpp>
-//#include <GL/GLM/ext.hpp>
-//#include <GL/GLM/gtc/matrix_transform.hpp>
-//#include <GL/GLM/gtx/vector_angle.hpp>
-//#include <GL/GLM/gtx/euler_angles.hpp>
-
-#include "ServerLib/include/pch.h"
-#include "ServerLib/include/NetworkCore.h"
-#ifdef _DEBUG
-#pragma comment(lib, "ServerLib/lib/debug/ServerLib.lib")
-#else
-#pragma comment(lib, "ServerLib/lib/Release/ServerLib.lib")
-#endif
+﻿#include "pch.h"
+#include "Component.h"
 
 int main()
 {
@@ -51,37 +38,42 @@ int main()
 	glViewport(0, 0, width, height);
 	glfwSwapInterval(0);
 
-	std::shared_ptr<ClientCore> clientCore = std::make_shared<ClientCore>();
-	clientCore->Init();
+	//std::shared_ptr<ClientCore> clientCore = std::make_shared<ClientCore>();
+	//clientCore->Init();
 
-	if (false == clientCore->Start("127.0.0.1", 7777)) {
-		return EXIT_FAILURE;
-	}
+	//if (false == clientCore->Start("127.0.0.1", 7777)) {
+	//	return EXIT_FAILURE;
+	//}
 	std::cout << "\nThis Program Use This GPU : " << glGetString(GL_RENDERER) << std::endl;
 
+	GameObject obj1;
+	TestComponent comp;
+
 	std::string str{ "PING!!!" };
-	std::chrono::milliseconds delay{ 100 };
+	std::chrono::milliseconds delay{ 1000 };
 	while (false == glfwWindowShouldClose(window)) {
 		std::this_thread::sleep_for(delay);
 
-		// Networking
-		auto packetHandler = clientCore->GetPacketHandler();
-		auto& buffer = packetHandler->GetBuffer();
+		//// Networking
+		//auto packetHandler = clientCore->GetPacketHandler();
+		//auto& buffer = packetHandler->GetBuffer();
 
-		if (0 != buffer.Size()) {
-			std::cout << "----------Recv Data----------" << std::endl;
-			std::cout << buffer.Data() << std::endl;
-		}
+		//if (0 != buffer.Size()) {
+		//	std::cout << "----------Recv Data----------" << std::endl;
+		//	std::cout << buffer.Data() << std::endl;
+		//}
+
+		comp.Update(0.0f);
 
 		glClearColor(1.0f, 0.5f, 0.5f, 1.f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		glfwSwapBuffers(window);
 
-		clientCore->Send(str.data(), str.size());
+		//clientCore->Send(str.data(), str.size());
 
 		glfwPollEvents();
 	}
 
-	clientCore->End();
+	//clientCore->End();
 }
