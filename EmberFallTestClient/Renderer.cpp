@@ -1,18 +1,18 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "Renderer.h"
 
 Renderer::Renderer() {
-	// glfw ¶óÀÌºê·¯¸® ÃÊ±âÈ­
+	// glfw ë¼ì´ë¸ŒëŸ¬ë¦¬ ì´ˆê¸°í™”
 	if (false == glfwInit()) {
 		exit(EXIT_FAILURE);
 	}
 
-	// OpenGL ¹öÀü ¼³Á¤
+	// OpenGL ë²„ì „ ì„¤ì •
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	// À©µµ¿ì Á¤º¸ ÃÊ±â ¼³Á¤
+	// ìœˆë„ìš° ì •ë³´ ì´ˆê¸° ì„¤ì •
 	INT32 width = 1080;
 	INT32 height = 720;
 	INT32 x = 0;
@@ -25,7 +25,7 @@ Renderer::Renderer() {
 		exit(EXIT_FAILURE);
 	}
 
-	// »ı¼ºÇÑ À©µµ¿ì¸¦ ÇöÀç ¸ŞÀÎ À©µµ¿ì·Î ¼³Á¤
+	// ìƒì„±í•œ ìœˆë„ìš°ë¥¼ í˜„ì¬ ë©”ì¸ ìœˆë„ìš°ë¡œ ì„¤ì •
 	glfwMakeContextCurrent(mWindow);
 
 	glewExperimental = GL_TRUE;
@@ -33,7 +33,7 @@ Renderer::Renderer() {
 		exit(EXIT_FAILURE);
 	}
 
-	// ºäÆ÷Æ® ¼³Á¤
+	// ë·°í¬íŠ¸ ì„¤ì •
 	glViewport(0, 0, width, height);
 	glfwSwapInterval(0);
 }

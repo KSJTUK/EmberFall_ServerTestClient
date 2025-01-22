@@ -8,10 +8,10 @@
 //#include <GL/GLM/gtx/vector_angle.hpp>
 //#include <GL/GLM/gtx/euler_angles.hpp>
 
-#include "ServerLib/include/pch.h"
-#include "ServerLib/include/NetworkCore.h"
+#include "../External/Include/ServerLib/pch.h"
+#include "../External/Include/ServerLib/NetworkCore.h"
 #ifdef _DEBUG
-#pragma comment(lib, "ServerLib/lib/debug/ServerLib.lib")
+#pragma comment(lib, "../External/Lib/ServerLib/debug/ServerLib.lib")
 #else
-#pragma comment(lib, "ServerLib/lib/Release/ServerLib.lib")
+#pragma comment(lib, "../External/Lib/ServerLib/Release/ServerLib.lib")
 #endif
