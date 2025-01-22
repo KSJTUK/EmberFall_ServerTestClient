@@ -21,9 +21,19 @@ int main()
 			auto packetHandler = clientCore->GetPacketHandler();
 			auto& buffer = packetHandler->GetBuffer();
 
-			if (0 != buffer.Size()) {
-				std::cout << "----------Recv Data----------" << std::endl;
-				std::cout << buffer.Data() << std::endl;
+			PacketHeader header{ };
+			while (not buffer.IsReadEnd()) {
+				buffer.Read(header);
+				switch (header.type) {
+				case PacketType::PT_NOTIFYING_ID:
+					std::cout << std::format("INIT SESSION ID : {}\n", header.id);
+					clientCore->InitSessionId(header.id);
+					break;
+
+				default:
+					std::cout << "PACKET ERROR" << std::endl;;
+					break;
+				}
 			}
 		}
 
@@ -39,7 +49,7 @@ int main()
 
 		{
 			// Networking - Send Input Results
-			PacketInput inputPacket{ sizeof(PacketInput), PacketType::PT_INPUT_CS, 0 };
+			PacketInput inputPacket{ sizeof(PacketInput), PacketType::PT_INPUT_CS, clientCore->GetSessionId() };
 			auto& keyList = Input::GetStateChangedKeys();
 			for (auto key : keyList) {
 				inputPacket.key = key;
