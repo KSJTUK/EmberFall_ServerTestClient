@@ -1,5 +1,6 @@
 ﻿#include "pch.h"
 #include "GameObject.h"
+#include "Input.h"
 #include "Renderer.h"
 
 int main()
@@ -14,13 +15,9 @@ int main()
 	}
 	std::cout << "\nThis Program Use This GPU : " << glGetString(GL_RENDERER) << std::endl; 
 
-
-	std::chrono::milliseconds delay{ 1000 };
 	while (false == glfwWindowShouldClose(renderer.GetWindow())) {
-		std::this_thread::sleep_for(delay);
-
 		{
-			// Networking
+			// Networking - Process Recieved Packets
 			auto packetHandler = clientCore->GetPacketHandler();
 			auto& buffer = packetHandler->GetBuffer();
 
@@ -30,6 +27,8 @@ int main()
 			}
 		}
 
+		Input::Update();
+
 		{
 			// Render
 			glClearColor(0.5f, 0.5f, 0.5f, 1.f);
@@ -37,6 +36,18 @@ int main()
 
 			glfwSwapBuffers(renderer.GetWindow());
 		}
+
+		{
+			// Networking - Send Input Results
+			PacketInput inputPacket{ sizeof(PacketInput), PacketType::PT_INPUT_CS, 0 };
+			auto& keyList = Input::GetStateChangedKeys();
+			for (auto key : keyList) {
+				inputPacket.key = key;
+				clientCore->Send(&inputPacket, inputPacket.size);
+			}
+		}
+
+		Input::Clear();
 
 		glfwPollEvents();
 	}

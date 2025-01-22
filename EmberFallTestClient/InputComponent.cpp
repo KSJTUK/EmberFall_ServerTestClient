@@ -8,8 +8,6 @@ InputComponent::InputComponent() { }
 InputComponent::~InputComponent() { }
 
 void InputComponent::Update(const float deltaTime, GameObject& obj) { 
-    if (true == Input::GetState(VK_LEFT)) {
-    }
 }
 
 std::shared_ptr<Component> InputComponent::Clone() {

@@ -1,12 +1,24 @@
 #include "pch.h"
 #include "Input.h"
 
-bool Input::GetState(KeyType key) {
-    return mKeys[key] & 0x80;
+void Input::Update() {
+    auto result = ::GetKeyboardState(mKeys.data());
+    CrashExp(result == false, "");
+
+    for (BYTE key{ 0x00 }; auto & keyState : mKeys) {
+        bool curState = keyState & 0x80;
+        if (curState != mKeyStates[key]) {
+            mKeyStates[key] = curState;
+            mStateChangedKeys.emplace_back(key, curState);
+        }
+        ++key;
+    }
 }
 
-void Input::Update() {
-    if (not ::GetKeyboardState(mKeys.data())) {
-        return;
-    }
+std::list<Key>& Input::GetStateChangedKeys() {
+    return mStateChangedKeys;
+}
+
+void Input::Clear() {
+    mStateChangedKeys.clear();
 }
