@@ -1,6 +1,5 @@
 ﻿#include "pch.h"
 #include "GameObject.h"
-#include "TestComponent.h"
 
 int main()
 {
@@ -47,7 +46,13 @@ int main()
 	}
 	std::cout << "\nThis Program Use This GPU : " << glGetString(GL_RENDERER) << std::endl;
 
-	std::string str{ "PING!!!" };
+	PacketChat chat{ };
+	auto len = ::strlen("PING!!!");
+	::memcpy(chat.chatdata, "PING!!!", len);
+	chat.size = len + sizeof(PacketHeader);
+	chat.type = 0;
+	chat.id = 0;
+
 	std::chrono::milliseconds delay{ 1000 };
 	while (false == glfwWindowShouldClose(window)) {
 		std::this_thread::sleep_for(delay);
@@ -66,7 +71,7 @@ int main()
 
 		glfwSwapBuffers(window);
 
-		clientCore->Send(str.data(), str.size());
+		clientCore->Send(&chat, chat.size);
 
 		glfwPollEvents();
 	}

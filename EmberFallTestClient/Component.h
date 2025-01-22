@@ -4,7 +4,7 @@ class GameObject;
 
 class Component abstract {
 public:
-    Component() : mOwner{ std::make_shared<GameObject>() } { }
+    Component() { };
     Component(std::shared_ptr<GameObject> owner) : mOwner{ owner } { }
     virtual ~Component() { }
 
@@ -19,5 +19,5 @@ public:
     }
 
 private:
-    std::shared_ptr<GameObject> mOwner{ };
+    std::shared_ptr<GameObject> mOwner{ nullptr };
 };
