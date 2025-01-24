@@ -1,8 +1,8 @@
 #pragma once
-class Renderer {
+class Window {
 public:
-    Renderer();
-    ~Renderer();
+    Window();
+    ~Window();
 
 public:
     GLFWwindow* GetWindow();

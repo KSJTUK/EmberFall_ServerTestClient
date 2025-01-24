@@ -1,7 +1,7 @@
 ﻿#include "pch.h"
-#include "Renderer.h"
+#include "Window.h"
 
-Renderer::Renderer() {
+Window::Window() {
 	// glfw 라이브러리 초기화
 	if (false == glfwInit()) {
 		exit(EXIT_FAILURE);
@@ -38,8 +38,8 @@ Renderer::Renderer() {
 	glfwSwapInterval(0);
 }
 
-Renderer::~Renderer() { }
+Window::~Window() { }
 
-GLFWwindow* Renderer::GetWindow() {
+GLFWwindow* Window::GetWindow() {
 	return mWindow;
 }

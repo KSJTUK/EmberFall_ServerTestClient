@@ -2,7 +2,7 @@
 
 inline constexpr UINT32 INVALID_SHADER_ID = std::numeric_limits<UINT32>::max();
 
-class Shader {
+class Shader : public std::enable_shared_from_this<Shader> {
 public:
     Shader();
     ~Shader();

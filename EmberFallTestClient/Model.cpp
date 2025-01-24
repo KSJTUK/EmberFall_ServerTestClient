@@ -16,30 +16,30 @@ Model::Model(const std::string& objectFilePath, const std::string& textureFilePa
 Model::~Model() { }
 
 void Model::CalcMinMaxVertexElem() {
-	auto minAndMaxX = std::minmax_element(m_noDuplicatedVertex.begin(), m_noDuplicatedVertex.end(),
+	auto minAndMaxX = std::minmax_element(mNoDuplicatedVertex.begin(), mNoDuplicatedVertex.end(),
 		[](const glm::vec3& v1, const glm::vec3& v2) {
 			return v1.x < v2.x;
 		}
 	);
 
-	auto minAndMaxY = std::minmax_element(m_noDuplicatedVertex.begin(), m_noDuplicatedVertex.end(),
+	auto minAndMaxY = std::minmax_element(mNoDuplicatedVertex.begin(), mNoDuplicatedVertex.end(),
 		[](const glm::vec3& v1, const glm::vec3& v2) {
 			return v1.y < v2.y;
 		}
 	);
 
-	auto minAndMaxZ = std::minmax_element(m_noDuplicatedVertex.begin(), m_noDuplicatedVertex.end(),
+	auto minAndMaxZ = std::minmax_element(mNoDuplicatedVertex.begin(), mNoDuplicatedVertex.end(),
 		[](const glm::vec3& v1, const glm::vec3& v2) {
 			return v1.z < v2.z;
 		}
 	);
 
-	m_maxCoord = glm::vec3{ minAndMaxX.second->x, minAndMaxY.second->y, minAndMaxZ.second->z };
-	m_minCoord = glm::vec3{ minAndMaxX.first->x, minAndMaxY.first->y, minAndMaxZ.first->z };
+	mMaxCoord = glm::vec3{ minAndMaxX.second->x, minAndMaxY.second->y, minAndMaxZ.second->z };
+	mMinCoord = glm::vec3{ minAndMaxX.first->x, minAndMaxY.first->y, minAndMaxZ.first->z };
 }
 
 void Model::MakeBoundingBox() {
-	m_boundingBox = { m_maxCoord, m_minCoord };
+	mBoundingBox = { mMaxCoord, mMinCoord };
 }
 
 void Model::ReadFace(std::stringstream& contents, std::vector<unsigned int>* indiciesVec) {
@@ -129,30 +129,30 @@ void Model::ReadObject(const char* filePath) {
 
 	// 정점 노멀과 텍스쳐의 갯수가 각각 다 다르기 때문에 더이상 DrawElements를 사용하기는 어려움
 	// 따라서 정점들을 복제함
-	m_verticies.resize(indiciesVec[0].size());
-	auto endLoop{ m_verticies.size() };
+	mVerticies.resize(indiciesVec[0].size());
+	auto endLoop{ mVerticies.size() };
 
 	for (auto i = 0; i < endLoop; ++i) {
-		m_verticies[i].position = vertexPositions[indiciesVec[0][i]];
-		if (!indiciesVec[1].empty()) m_verticies[i].uv = vertexTextureCoord[indiciesVec[1][i]];
-		if (!indiciesVec[2].empty()) m_verticies[i].normal = vertexNormals[indiciesVec[2][i]];
+		mVerticies[i].position = vertexPositions[indiciesVec[0][i]];
+		if (!indiciesVec[1].empty()) mVerticies[i].uv = vertexTextureCoord[indiciesVec[1][i]];
+		if (!indiciesVec[2].empty()) mVerticies[i].normal = vertexNormals[indiciesVec[2][i]];
 	}
 
-	std::cout << m_verticies.size() << std::endl;
+	std::cout << mVerticies.size() << std::endl;
 
 	// 단 정점 최소 최댓값의 계산을 빠르게 하기위해 중복되지 않은 정점 배열을 계산에 사용
-	m_noDuplicatedVertex = vertexPositions;
+	mNoDuplicatedVertex = vertexPositions;
 
 	CalcMinMaxVertexElem();
 	MakeBoundingBox();
 }
 
 void Model::SetPatchParameters(int numOfPatches) {
-	m_graphicsBuffer->SetPatchParameters(numOfPatches);
+	mGraphicsBuffer->SetPatchParameters(numOfPatches);
 }
 
 void Model::SetDrawMode(int drawMode) {
-	m_graphicsBuffer->SetDrawMode(drawMode);
+	mGraphicsBuffer->SetDrawMode(drawMode);
 }
 
 //bool Model::ExistTexture() const {
@@ -164,15 +164,15 @@ void Model::SetDrawMode(int drawMode) {
 //}
 
 void Model::Init() {
-	m_graphicsBuffer = std::make_unique<GraphicsBuffer>();
-	m_graphicsBuffer->Init();
+	mGraphicsBuffer = std::make_unique<GraphicsBuffer>();
+	mGraphicsBuffer->Init();
 
-	m_graphicsBuffer->SetVerticies(m_verticies);
+	mGraphicsBuffer->SetVerticies(mVerticies);
 }
 
 void Model::Update() {
 }
 
 void Model::Render() {
-	m_graphicsBuffer->Render();
+	mGraphicsBuffer->Render();
 }

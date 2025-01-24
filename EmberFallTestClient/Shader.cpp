@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Shader.h"
+#include "GameObject.h"
 
 Shader::Shader() { }
 
@@ -7,12 +8,17 @@ Shader::~Shader() {
     mRenderingList.clear();
 }
 
-void Shader::RegisterRenderingObject(std::shared_ptr<class GameObject> gameObj) {
+void Shader::RegisterRenderingObject(std::shared_ptr<GameObject> gameObj) {
     mRenderingList.push_back(gameObj);
+	gameObj->ResetShader(shared_from_this());
 }
 
 void Shader::Render() {
-
+	glUseProgram(mId);
+	for (auto& obj : mRenderingList) {
+		obj->Render();
+	}
+	glUseProgram(0);
 }
 
 UINT32 Shader::CreateShader(const std::string& shaderPath, UINT32 shaderType) {
@@ -42,7 +48,7 @@ UINT32 Shader::CreateShader(const std::string& shaderPath, UINT32 shaderType) {
 	::memset(errorlog, 0, 512);
 
 	glGetShaderiv(id, GL_COMPILE_STATUS, &result);
-	if (0 != result) {
+	if (0 == result) {
 		glGetShaderInfoLog(id, 512, NULL, errorlog);
 		std::cerr << "ERROR : SHADER COMPILE ERROR" << std::endl;
 		std::cerr << errorlog << std::endl;

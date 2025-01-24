@@ -27,7 +27,7 @@ public:
 	void SetDrawMode(int drawMode);
 	//bool ExistTexture() const;
 
-	std::pair<glm::vec3, glm::vec3> GetBoundingBox() const { return m_boundingBox; }
+	std::pair<glm::vec3, glm::vec3> GetBoundingBox() const { return mBoundingBox; }
 
 	//void BindingTexture(int textureIndex);
 
@@ -38,19 +38,19 @@ public:
 
 private:
 	// VAO, VBO, EBO를 가지는 객체
-	std::unique_ptr<class GraphicsBuffer> m_graphicsBuffer{ };
+	std::unique_ptr<class GraphicsBuffer> mGraphicsBuffer{ };
 	//std::unique_ptr<class TextureComponent> m_textureComponent{ };
 
 	// 정점 속성들을 저장할 vector
-	std::vector<Vertex> m_verticies{ };
+	std::vector<Vertex> mVerticies{ };
 
 	// 정점 노멀들을 저장할 vector
-	std::vector<glm::vec3> m_vertexNormals{ };
-	std::vector<glm::vec3> m_noDuplicatedVertex{ };
+	std::vector<glm::vec3> mVertexnormals{ };
+	std::vector<glm::vec3> mNoDuplicatedVertex{ };
 
 	// 정점좌표들 중 최대 최소인 x, y, z 값을 저장할 변수들
-	glm::vec3 m_maxCoord{ };
-	glm::vec3 m_minCoord{ };
+	glm::vec3 mMaxCoord{ };
+	glm::vec3 mMinCoord{ };
 
-	std::pair<glm::vec3, glm::vec3> m_boundingBox{ };
+	std::pair<glm::vec3, glm::vec3> mBoundingBox{ };
 };

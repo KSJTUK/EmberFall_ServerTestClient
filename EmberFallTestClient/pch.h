@@ -24,6 +24,11 @@ inline constexpr UINT32 INVALID_PROGRAM_ID = std::numeric_limits<UINT32>::max();
 const std::string EMPTYSTRING{ };
 const std::string SHADER_DIR{ "./Shader/" };
 
+inline glm::mat4 identity{ 1, 0, 0, 0,
+                    0, 1, 0, 0,
+                    0, 0, 1, 0,
+                    0, 0, 0, 1 };
+
 const std::vector<std::string> static_shader{
     "static_vertex_shader.glsl",
     EMPTYSTRING,

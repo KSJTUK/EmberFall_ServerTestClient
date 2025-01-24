@@ -41,7 +41,7 @@
     <ClCompile Include="PhysicsComponent.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="Renderer.cpp">
+    <ClCompile Include="Window.cpp">
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="Shader.cpp">
@@ -52,6 +52,9 @@
     </ClCompile>
     <ClCompile Include="Model.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -73,7 +76,7 @@
     <ClInclude Include="PhysicsComponent.h">
       <Filter>source</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer.h">
+    <ClInclude Include="Window.h">
       <Filter>source</Filter>
     </ClInclude>
     <ClInclude Include="Shader.h">
@@ -85,5 +88,14 @@
     <ClInclude Include="Model.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Camera.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shader\static_fragment_shader.glsl">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="shader\static_vertex_shader.glsl">
+      <Filter>Shader</Filter>
+    </None>
   </ItemGroup>
 </Project>
