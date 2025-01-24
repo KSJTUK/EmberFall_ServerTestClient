@@ -3,6 +3,10 @@
 #include "Input.h"
 #include "Renderer.h"
 
+#define STAND_ALONE
+
+#include "Shader.h"
+
 int main()
 {
 	Renderer renderer{ };
@@ -10,12 +14,18 @@ int main()
 	std::shared_ptr<ClientCore> clientCore = std::make_shared<ClientCore>();
 	clientCore->Init();
 
+#ifndef STAND_ALONE
 	if (false == clientCore->Start("127.0.0.1", 7777)) {
 		return EXIT_FAILURE;
 	}
 	std::cout << "\nThis Program Use This GPU : " << glGetString(GL_RENDERER) << std::endl; 
+#endif
+
+	Shader shader{ };
+	shader.CreateShaders(static_shader);
 
 	while (false == glfwWindowShouldClose(renderer.GetWindow())) {
+#ifndef STAND_ALONE
 		{
 			// Networking - Process Recieved Packets
 			auto packetHandler = clientCore->GetPacketHandler();
@@ -36,6 +46,7 @@ int main()
 				}
 			}
 		}
+#endif
 
 		Input::Update();
 
@@ -47,6 +58,7 @@ int main()
 			glfwSwapBuffers(renderer.GetWindow());
 		}
 
+#ifndef STAND_ALONE
 		{
 			// Networking - Send Input Results
 			PacketInput inputPacket{ sizeof(PacketInput), PacketType::PT_INPUT_CS, clientCore->GetSessionId() };
@@ -56,6 +68,7 @@ int main()
 				clientCore->Send(&inputPacket, inputPacket.size);
 			}
 		}
+#endif
 
 		Input::Clear();
 
