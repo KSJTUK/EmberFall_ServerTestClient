@@ -6,6 +6,8 @@ inline constexpr KeyType MAX_KEY = 256;
 class Input {
 public:
     static void SetMainWindow(std::shared_ptr<class Window> window);
+    static bool GetState(KeyType key);
+    static glm::vec2 GetDeltaMouse();
     static void Update();
     static std::list<Key>& GetStateChangedKeys();
     static void Clear();

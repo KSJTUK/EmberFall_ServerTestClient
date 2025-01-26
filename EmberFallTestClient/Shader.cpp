@@ -1,11 +1,16 @@
 #include "pch.h"
 #include "Shader.h"
+#include "Camera.h"
 #include "GameObject.h"
 
 Shader::Shader() { }
 
 Shader::~Shader() {
     mRenderingList.clear();
+}
+
+void Shader::SetCamera(std::shared_ptr<Camera> camera) {
+	mCamera = camera;
 }
 
 void Shader::RegisterRenderingObject(std::shared_ptr<GameObject> gameObj) {
@@ -15,6 +20,10 @@ void Shader::RegisterRenderingObject(std::shared_ptr<GameObject> gameObj) {
 
 void Shader::Render() {
 	glUseProgram(mId);
+	if (nullptr != mCamera) {
+		mCamera->Render(shared_from_this());
+	}
+
 	for (auto& obj : mRenderingList) {
 		obj->Render();
 	}

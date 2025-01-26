@@ -30,6 +30,7 @@ public:
     void SetUniformFloat(const std::string& valueName, const float value);
     void SetUniformInt(const std::string& valueName, const int value);
 
+    void SetCamera(std::shared_ptr<class Camera> camera);
     void RegisterRenderingObject(std::shared_ptr<class GameObject> gameObj);
     void Render();
 
@@ -39,6 +40,7 @@ private:
 
 private:
     UINT32 mId{ };
+    std::shared_ptr<class Camera> mCamera{ };
     std::list<std::shared_ptr<class GameObject>> mRenderingList{ };
     std::unordered_map<std::string, INT32> mUniformLocationMap{ };
 };

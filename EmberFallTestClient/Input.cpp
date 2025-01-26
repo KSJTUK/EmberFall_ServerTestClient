@@ -6,6 +6,14 @@ void Input::SetMainWindow(std::shared_ptr<Window> window) {
     mWindow = window;
 }
 
+bool Input::GetState(KeyType key) {
+    return mKeyStates[key];
+}
+
+glm::vec2 Input::GetDeltaMouse() {
+    return mDeltaMouse;
+}
+
 void Input::Update() {
     // Update Keyboard
     auto result = ::GetKeyboardState(mKeys.data());
@@ -14,9 +22,9 @@ void Input::Update() {
     for (BYTE key{ 0x00 }; auto & keyState : mKeys) {
         bool curState = keyState & 0x80;
         if (curState != mKeyStates[key]) {
-            mKeyStates[key] = curState;
             mStateChangedKeys.emplace_back(key, curState);
         }
+        mKeyStates[key] = curState;
         ++key;
     }
 

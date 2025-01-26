@@ -33,6 +33,9 @@ int main()
 	std::shared_ptr<GameObject> obj1 = std::make_shared<GameObject>();
 	obj1->ResetModel(model);
 	shader->RegisterRenderingObject(obj1);
+	
+	std::shared_ptr<FreeCamera> camera = std::make_unique<FreeCamera>(window, glm::vec3{ 0.f, 0.f, 0.f }, glm::vec3{ -1.0f, 0.f, 0.f });
+	shader->SetCamera(camera);
 
 	while (false == glfwWindowShouldClose(window->GetWindow())) {
 #ifndef STAND_ALONE
@@ -59,6 +62,7 @@ int main()
 #endif
 
 		Input::Update();
+		camera->Update(0.01f);
 
 		{
 			// Render
@@ -67,7 +71,6 @@ int main()
 
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-			//shader->SetUniformMat4("viewProj", GL_FALSE, identity);
 			shader->Render(); 
 
 			glfwSwapBuffers(window->GetWindow());
@@ -90,5 +93,7 @@ int main()
 		glfwPollEvents();
 	}
 
-	//clientCore->End();
+#ifndef STAND_ALONE
+	clientCore->End();
+#endif
 }

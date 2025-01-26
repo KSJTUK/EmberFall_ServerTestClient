@@ -1,9 +1,11 @@
 #pragma once
 
+class Window;
+
 class Camera abstract {
 public:
 	Camera() = default;
-	Camera(GLFWwindow* window, glm::vec3 EYE, glm::vec3 AT);
+	Camera(std::shared_ptr<Window> window, glm::vec3 EYE, glm::vec3 AT);
 
 	~Camera() = default;
 	Camera(const Camera& other) = delete;
@@ -26,10 +28,10 @@ public:
 
 protected:
 	// To get aspect
-	GLFWwindow* mWindow{};
+	std::shared_ptr<Window> mWindow{};
 
-	glm::mat4 mProjection{ };
-	glm::mat4 mView{ };
+	glm::mat4 mProjection{ identity };
+	glm::mat4 mView{ identity };
 
 protected:
 	glm::vec3 mEye{};
@@ -52,7 +54,7 @@ protected:
 
 class FreeCamera : public Camera {
 public:
-	FreeCamera(GLFWwindow* window, glm::vec3 EYE, glm::vec3 AT);
+	FreeCamera(std::shared_ptr<Window> window, glm::vec3 EYE, glm::vec3 AT);
 	~FreeCamera();
 
 public:

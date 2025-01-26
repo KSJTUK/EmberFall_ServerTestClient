@@ -56,6 +56,9 @@
     <ClCompile Include="Camera.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="TextureComponent.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">
@@ -88,7 +91,12 @@
     <ClInclude Include="Model.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h" />
+    <ClInclude Include="TextureComponent.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\static_fragment_shader.glsl">
