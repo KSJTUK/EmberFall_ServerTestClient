@@ -7,7 +7,7 @@
 #include "Input.h"
 
 constexpr auto CameraSpeed = 20.f;
-constexpr auto MOUSE_SENSITIVE = 0.1f;
+constexpr auto MOUSE_SENSITIVE = 0.03f;
 
 Camera::Camera(std::shared_ptr<Window> window, glm::vec3 EYE, glm::vec3 AT) : mWindow(window), mEye(EYE), mAt(AT) {
 	int width, height;
@@ -80,8 +80,7 @@ void FreeCamera::Update(float deltaTime) {
 	//m_cancelMove = false;
 
 	glm::vec2 deltaMouse = Input::GetDeltaMouse();
-
-	if (!(deltaMouse.x == 0 and deltaMouse.y == 0)) {
+	if (Input::GetState(GLFW_MOUSE_BUTTON_2)) {
 		glm::mat4 cameraRotate{ 1.f };
 
 		cameraRotate = glm::rotate(cameraRotate, glm::radians(-deltaMouse.y * MOUSE_SENSITIVE), mBasisX);
