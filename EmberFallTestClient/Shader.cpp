@@ -4,7 +4,9 @@
 #include "GameObject.h"
 #include "Lighting.h"
 
-Shader::Shader() { }
+Shader::Shader(const std::vector<std::string>& files) { 
+	CreateShaders(files);
+}
 
 Shader::~Shader() {
     mRenderingList.clear();
@@ -19,8 +21,20 @@ void Shader::RegisterRenderingObject(std::shared_ptr<GameObject> gameObj) {
 	gameObj->ResetShader(shared_from_this());
 }
 
+void Shader::RegisterRenderingObject(std::initializer_list<std::shared_ptr<GameObject>> gameObjs) {
+	for (auto gameObj : gameObjs) {
+		RegisterRenderingObject(gameObj);
+	}
+}
+
 void Shader::RegisterLight(std::shared_ptr<class Light> light) {
 	mRenderingLights.push_back(light);
+}
+
+void Shader::RegisterLights(std::initializer_list<std::shared_ptr<class Light>> lights) {
+	for (auto light : lights) {
+		RegisterLight(light);
+	}
 }
 
 void Shader::Render() {
@@ -28,7 +42,7 @@ void Shader::Render() {
 	auto sharedThis = shared_from_this();
 	if (nullptr != mCamera) {
 		mCamera->Render(sharedThis);
-	}
+	}	
 
 	for (auto& light : mRenderingLights) {
 		light->Render(sharedThis);
@@ -37,7 +51,7 @@ void Shader::Render() {
 	for (auto& obj : mRenderingList) {
 		obj->Render();
 	}
-	glUseProgram(0);
+	glUseProgram(INVALID_SHADER_ID);
 }
 
 UINT32 Shader::CreateShader(const std::string& shaderPath, UINT32 shaderType) {

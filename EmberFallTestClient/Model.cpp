@@ -6,12 +6,22 @@
 Model::Model(const std::string& objectFilePath) {
 	ReadObject(objectFilePath.c_str());
 	mTexture = nullptr;
+
+	mGraphicsBuffer = std::make_unique<GraphicsBuffer>();
+	mGraphicsBuffer->Init();
+
+	mGraphicsBuffer->SetVerticies(mVerticies);
 }
 
 Model::Model(const std::string& objectFilePath, const std::string& textureFilePath) {
 	ReadObject(objectFilePath.c_str());
 	mTexture = std::make_unique<Texture>();
 	mTexture->LoadTexture(textureFilePath, true);
+
+	mGraphicsBuffer = std::make_unique<GraphicsBuffer>();
+	mGraphicsBuffer->Init();
+
+	mGraphicsBuffer->SetVerticies(mVerticies);
 }
 
 Model::~Model() { }
@@ -162,13 +172,6 @@ bool Model::ExistTexture() const {
 
 void Model::BindingTexture(int textureIndex) {
 	mTexture->BindingTexture(textureIndex);
-}
-
-void Model::Init() {
-	mGraphicsBuffer = std::make_unique<GraphicsBuffer>();
-	mGraphicsBuffer->Init();
-
-	mGraphicsBuffer->SetVerticies(mVerticies);
 }
 
 void Model::Update() {

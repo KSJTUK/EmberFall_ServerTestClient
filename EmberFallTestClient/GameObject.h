@@ -4,11 +4,11 @@
 
 class GameObject {
 public:
-    GameObject() { }  
-    ~GameObject() { }
+    GameObject(std::shared_ptr<class Model> model = nullptr);
+    ~GameObject();
 
 public:
-    void ResetModel(std::shared_ptr<class Model> model);
+    void ResetModel(std::shared_ptr<class Model> model=nullptr);
     void ResetShader(std::shared_ptr<class Shader> shader);
     void BindingTexture();
     void Update(const float deltaTime);

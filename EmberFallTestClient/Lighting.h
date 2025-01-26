@@ -54,7 +54,13 @@ public:
 	~PointLight();
 
 public:
+	void SetModel(std::shared_ptr<class Model> lightModel);
+
+public:
 	void Render(const std::shared_ptr<Shader>& curShader);
+
+private:
+	std::shared_ptr<class Model> mLightModel{ nullptr };
 };
 
 class SpotLight : public Light {

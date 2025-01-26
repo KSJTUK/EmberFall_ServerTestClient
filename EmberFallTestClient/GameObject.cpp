@@ -3,6 +3,11 @@
 #include "Model.h"
 #include "Shader.h"
 
+GameObject::GameObject(std::shared_ptr<class Model> model)
+    : mModel{ model } { }
+
+GameObject::~GameObject() { }
+
 void GameObject::ResetModel(std::shared_ptr<class Model> model) {
     mModel = model;
 }

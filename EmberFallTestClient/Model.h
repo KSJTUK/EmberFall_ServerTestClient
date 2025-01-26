@@ -32,7 +32,6 @@ public:
 	void BindingTexture(int textureIndex);
 
 public:
-	void Init();
 	void Update();
 	void Render();
 

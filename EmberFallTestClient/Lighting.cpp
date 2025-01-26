@@ -37,6 +37,10 @@ PointLight::PointLight() : Light{ LightType::POINT } { }
 
 PointLight::~PointLight() { }
 
+void PointLight::SetModel(std::shared_ptr<class Model> lightModel) {
+	mLightModel = lightModel;
+}
+
 void PointLight::Render(const std::shared_ptr<Shader>& curShader) {
 	curShader->SetUniformVec3("pointLight.position", mLightPosition);
 			
