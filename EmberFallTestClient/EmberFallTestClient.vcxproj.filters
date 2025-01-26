@@ -56,8 +56,14 @@
     <ClCompile Include="Camera.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="TextureComponent.cpp">
+    <ClCompile Include="Texture.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="stbi_image.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="Lighting.cpp">
+      <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -91,12 +97,16 @@
     <ClInclude Include="Model.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="TextureComponent.h">
+    <ClInclude Include="Texture.h">
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>source</Filter>
     </ClInclude>
+    <ClInclude Include="stb_image.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="Lighting.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\static_fragment_shader.glsl">

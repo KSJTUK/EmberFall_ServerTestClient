@@ -2,6 +2,7 @@
 #include "Shader.h"
 #include "Camera.h"
 #include "GameObject.h"
+#include "Lighting.h"
 
 Shader::Shader() { }
 
@@ -18,10 +19,19 @@ void Shader::RegisterRenderingObject(std::shared_ptr<GameObject> gameObj) {
 	gameObj->ResetShader(shared_from_this());
 }
 
+void Shader::RegisterLight(std::shared_ptr<class Light> light) {
+	mRenderingLights.push_back(light);
+}
+
 void Shader::Render() {
 	glUseProgram(mId);
+	auto sharedThis = shared_from_this();
 	if (nullptr != mCamera) {
-		mCamera->Render(shared_from_this());
+		mCamera->Render(sharedThis);
+	}
+
+	for (auto& light : mRenderingLights) {
+		light->Render(sharedThis);
 	}
 
 	for (auto& obj : mRenderingList) {

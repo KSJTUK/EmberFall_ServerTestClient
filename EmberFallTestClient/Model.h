@@ -25,11 +25,11 @@ public:
 	// setter
 	void SetPatchParameters(int numOfPatches);
 	void SetDrawMode(int drawMode);
-	//bool ExistTexture() const;
+	bool ExistTexture() const;
 
 	std::pair<glm::vec3, glm::vec3> GetBoundingBox() const { return mBoundingBox; }
 
-	//void BindingTexture(int textureIndex);
+	void BindingTexture(int textureIndex);
 
 public:
 	void Init();
@@ -39,7 +39,7 @@ public:
 private:
 	// VAO, VBO, EBO를 가지는 객체
 	std::unique_ptr<class GraphicsBuffer> mGraphicsBuffer{ };
-	//std::unique_ptr<class TextureComponent> m_textureComponent{ };
+	std::unique_ptr<class Texture> mTexture{ };
 
 	// 정점 속성들을 저장할 vector
 	std::vector<Vertex> mVerticies{ };

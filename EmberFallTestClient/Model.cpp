@@ -1,16 +1,17 @@
 #include "pch.h"
 #include "Model.h"
 #include "GraphicsBuffer.h"
+#include "Texture.h"
 
 Model::Model(const std::string& objectFilePath) {
 	ReadObject(objectFilePath.c_str());
-	//m_textureComponent = nullptr;
+	mTexture = nullptr;
 }
 
 Model::Model(const std::string& objectFilePath, const std::string& textureFilePath) {
 	ReadObject(objectFilePath.c_str());
-	//m_textureComponent = std::make_unique<TextureComponent>();
-	//m_textureComponent->LoadTexture(textureFilePath, true);
+	mTexture = std::make_unique<Texture>();
+	mTexture->LoadTexture(textureFilePath, true);
 }
 
 Model::~Model() { }
@@ -155,13 +156,13 @@ void Model::SetDrawMode(int drawMode) {
 	mGraphicsBuffer->SetDrawMode(drawMode);
 }
 
-//bool Model::ExistTexture() const {
-//	return bool{ m_textureComponent };
-//}
+bool Model::ExistTexture() const {
+	return bool{ mTexture };
+}
 
-//void Model::BindingTexture(int textureIndex) {
-//	m_textureComponent->BindingTexture(textureIndex);
-//}
+void Model::BindingTexture(int textureIndex) {
+	mTexture->BindingTexture(textureIndex);
+}
 
 void Model::Init() {
 	mGraphicsBuffer = std::make_unique<GraphicsBuffer>();

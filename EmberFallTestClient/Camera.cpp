@@ -6,7 +6,7 @@
 #include "Shader.h"
 #include "Input.h"
 
-constexpr auto CameraSpeed = 20.f;
+constexpr auto CAMERA_SPEED = 20.f;
 constexpr auto MOUSE_SENSITIVE = 0.03f;
 
 Camera::Camera(std::shared_ptr<Window> window, glm::vec3 EYE, glm::vec3 AT) : mWindow(window), mEye(EYE), mAt(AT) {
@@ -30,8 +30,7 @@ FreeCamera::FreeCamera(std::shared_ptr<Window> window, glm::vec3 EYE, glm::vec3 
 	mBoundingBox.second = mEye + mBoxSize.second;
 }
 
-FreeCamera::~FreeCamera() {
-}
+FreeCamera::~FreeCamera() { }
 
 void FreeCamera::Render(const std::shared_ptr<Shader>& curShader) {
 	curShader->SetUniformMat4("viewProj", GL_FALSE, mProjection * mView);
@@ -46,35 +45,35 @@ void FreeCamera::Update(float deltaTime) {
 
     if (Input::GetState(GLFW_KEY_W)) {
         mMoveVec -= mBasisZ;
-        mEye -= mBasisZ * deltaTime * CameraSpeed;
+        mEye -= mBasisZ * deltaTime * CAMERA_SPEED;
     }
 
     if (Input::GetState(GLFW_KEY_S)) {
         mMoveVec += mBasisZ;
-        mEye += mBasisZ * deltaTime * CameraSpeed;
+        mEye += mBasisZ * deltaTime * CAMERA_SPEED;
     }
 
 
     if (Input::GetState(GLFW_KEY_A)) {
         mMoveVec -= mBasisX;
-        mEye -= mBasisX * deltaTime * CameraSpeed;
+        mEye -= mBasisX * deltaTime * CAMERA_SPEED;
     }
 
 
     if (Input::GetState(GLFW_KEY_D)) {
         mMoveVec += mBasisX;
-        mEye += mBasisX * deltaTime * CameraSpeed;
+        mEye += mBasisX * deltaTime * CAMERA_SPEED;
     }
 
     if (Input::GetState(GLFW_KEY_Q)) {
         mMoveVec -= mBasisY;
-        mEye -= mBasisY * deltaTime * CameraSpeed;
+        mEye -= mBasisY * deltaTime * CAMERA_SPEED;
     }
 
 
     if (Input::GetState(GLFW_KEY_E)) {
         mMoveVec += mBasisY;
-        mEye += mBasisY * deltaTime * CameraSpeed;
+        mEye += mBasisY * deltaTime * CAMERA_SPEED;
     }
 
 	//m_cancelMove = false;

@@ -3,6 +3,7 @@
 #include "Input.h"
 #include "Window.h"
 #include "Camera.h"
+#include "Lighting.h"
 
 #define STAND_ALONE
 
@@ -27,16 +28,28 @@ int main()
 	std::shared_ptr<Shader> shader = std::make_shared<Shader>();
 	shader->CreateShaders(static_shader);
 
-	std::shared_ptr<Model> model = std::make_shared<Model>("object/cube.obj");
+	std::shared_ptr<Model> model = std::make_shared<Model>("object/cube.obj", "textures/container.jpg");
 	model->Init();
 
 	std::shared_ptr<GameObject> obj1 = std::make_shared<GameObject>();
 	obj1->ResetModel(model);
 	shader->RegisterRenderingObject(obj1);
 	
-	std::shared_ptr<FreeCamera> camera = std::make_unique<FreeCamera>(window, glm::vec3{ 0.f, 0.f, 0.f }, glm::vec3{ -1.0f, 0.f, 0.f });
+	std::shared_ptr<FreeCamera> camera = std::make_shared<FreeCamera>(window, glm::vec3{ 0.f, 0.f, 0.f }, glm::vec3{ -1.0f, 0.f, 0.f });
 	shader->SetCamera(camera);
 
+	auto pointLight = std::make_shared<PointLight>();
+	pointLight->SetPosition(glm::vec3{ 5.f, 5.f, 5.f });
+
+	auto spotLight = std::make_shared<SpotLight>();
+	auto globalLight = std::make_shared<DirectionLight>();
+	shader->RegisterLight(pointLight);
+	//shader->RegisterLight(spotLight);
+	//shader->RegisterLight(globalLight);
+
+	// 깊이 테스트 설정
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
 	while (false == glfwWindowShouldClose(window->GetWindow())) {
 #ifndef STAND_ALONE
 		{

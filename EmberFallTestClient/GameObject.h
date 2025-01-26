@@ -10,6 +10,7 @@ public:
 public:
     void ResetModel(std::shared_ptr<class Model> model);
     void ResetShader(std::shared_ptr<class Shader> shader);
+    void BindingTexture();
     void Update(const float deltaTime);
     void Render();
 

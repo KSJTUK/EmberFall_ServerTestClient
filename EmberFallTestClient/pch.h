@@ -1,14 +1,6 @@
 #pragma once
 
 #define GLM_ENABLE_EXPERIMENTAL
-#include "../External/Include/ServerLib/pch.h"
-#include "../External/Include/ServerLib/NetworkCore.h"
-#ifdef _DEBUG
-#pragma comment(lib, "../External/Lib/ServerLib/debug/ServerLib.lib")
-#else
-#pragma comment(lib, "../External/Lib/ServerLib/Release/ServerLib.lib")
-#endif
-
 #include <gl/glew.h>
 #include <gl/GLFW/glfw3.h>
 #include <glm/glm.hpp>
@@ -19,6 +11,35 @@
 
 #include <queue>
 #include <filesystem>
+#include "stb_image.h"
+
+#include "../External/Include/ServerLib/pch.h"
+#include "../External/Include/ServerLib/NetworkCore.h"
+#ifdef _DEBUG
+#pragma comment(lib, "../External/Lib/ServerLib/debug/ServerLib.lib")
+#else
+#pragma comment(lib, "../External/Lib/ServerLib/Release/ServerLib.lib")
+#endif
+
+struct Meterials {
+    glm::vec3 specular{ };
+    float shininess{ };
+};
+
+struct TextureInfo {
+    UINT32 id{ };
+    INT32 width{ };
+    INT32 height{ };
+    INT32 nrChannel{ };
+};
+
+struct CubeMapInfo {
+    enum { SIZE = 6 };
+    UINT32 id{ };
+    INT32 width[SIZE]{ };
+    INT32 height[SIZE]{ };
+    INT32 nrChannel[SIZE]{ };
+};
 
 inline constexpr UINT32 INVALID_PROGRAM_ID = std::numeric_limits<UINT32>::max();
 const std::string EMPTYSTRING{ };
