@@ -6,7 +6,9 @@ public:
     ~GameScene();
 
 public:
+    void ProcessPackets(const std::shared_ptr<ClientCore>& core);
     void Update();
+    void SendUpdateResult(const std::shared_ptr<ClientCore>& core);
     void Render();
 
 private:

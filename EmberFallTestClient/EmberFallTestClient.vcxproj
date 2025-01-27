@@ -155,7 +155,7 @@
     <None Include="lighting_object_fs.glsl">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-      <FileType>CppCode</FileType>
+      <FileType>Document</FileType>
     </None>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Model.cpp" />
@@ -182,7 +182,7 @@
     <ClInclude Include="InputComponent.h" />
     <ClInclude Include="Lighting.h" />
     <None Include="lighting_object_vs.glsl">
-      <FileType>CppHeader</FileType>
+      <FileType>Document</FileType>
     </None>
     <ClInclude Include="Model.h" />
     <ClInclude Include="pch.h" />

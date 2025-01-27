@@ -40,6 +40,28 @@ GameScene::GameScene(std::shared_ptr<Window> mainWindow)
 
 GameScene::~GameScene() { }
 
+void GameScene::ProcessPackets(const std::shared_ptr<ClientCore>& core) {
+#ifndef STAND_ALONE
+    auto packetHandler = core->GetPacketHandler();
+    auto& buffer = packetHandler->GetBuffer();
+
+    PacketHeader header{ };
+    while (not buffer.IsReadEnd()) {
+        buffer.Read(header);
+        switch (header.type) {
+        case PacketType::PT_NOTIFYING_ID:
+            std::cout << std::format("INIT SESSION ID : {}\n", header.id);
+            core->InitSessionId(header.id);
+            break;
+
+        default:
+            std::cout << "PACKET ERROR" << std::endl;;
+            break;
+        }
+    }
+#endif
+}
+
 void GameScene::Update() {
     mMainTimer->Update();
 
@@ -48,6 +70,18 @@ void GameScene::Update() {
     for (auto& obj : mObjects) {
         obj->Update(deltaTime);
     }
+}
+
+void GameScene::SendUpdateResult(const std::shared_ptr<ClientCore>& core) {
+#ifndef STAND_ALONE
+    // Networking - Send Input Results
+    PacketInput inputPacket{ sizeof(PacketInput), PacketType::PT_INPUT_CS, core->GetSessionId() };
+    auto& keyList = Input::GetStateChangedKeys();
+    for (auto key : keyList) {
+        inputPacket.key = key;
+        core->Send(&inputPacket, inputPacket.size);
+    }
+#endif
 }
 
 void GameScene::Render() {

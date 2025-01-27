@@ -33,9 +33,6 @@ bool SessionManager::AddSession(std::shared_ptr<Session> session) {
 
     mCoreService->GetIOCPCore()->RegisterSocket(session);
 
-    PacketNotifyId notifyingId{ sizeof(PacketNotifyId), PacketType::PT_NOTIFYING_ID, id };
-    session->RegisterSend(&notifyingId);
-
     return true;
 }
 
