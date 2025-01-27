@@ -13,27 +13,27 @@ void InputComponent::Update(const float deltaTime, GameObject& obj) {
     glm::vec3 moveVec{ };
     glm::vec3 look = transform.GetLook();
     if (Key::DOWN == Input::GetState(GLFW_KEY_W)) {
-        moveVec.z += speed * deltaTime;
-    }
-
-    if (Key::DOWN == Input::GetState(GLFW_KEY_S)) {
         moveVec.z -= speed * deltaTime;
     }
 
-    if (Key::DOWN == Input::GetState(GLFW_KEY_A)) {
-        moveVec.x += speed * deltaTime;
+    if (Key::DOWN == Input::GetState(GLFW_KEY_S)) {
+        moveVec.z += speed * deltaTime;
     }
 
-    if (Key::DOWN == Input::GetState(GLFW_KEY_D)) {
+    if (Key::DOWN == Input::GetState(GLFW_KEY_A)) {
         moveVec.x -= speed * deltaTime;
     }
 
+    if (Key::DOWN == Input::GetState(GLFW_KEY_D)) {
+        moveVec.x += speed * deltaTime;
+    }
+
     if (Key::DOWN == Input::GetState(GLFW_KEY_E)) {
-        moveVec.y += speed * deltaTime;
+        moveVec.y -= speed * deltaTime;
     }
 
     if (Key::DOWN == Input::GetState(GLFW_KEY_Q)) {
-        moveVec.y -= speed * deltaTime;
+        moveVec.y += speed * deltaTime;
     }
 
     glm::vec2 deltaMouse = Input::GetDeltaMouse();
