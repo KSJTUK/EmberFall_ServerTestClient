@@ -2,7 +2,7 @@
 
 class Window;
 
-class Camera abstract {
+class Camera {
 public:
 	Camera() = default;
 	Camera(std::shared_ptr<Window> window, glm::vec3 EYE, glm::vec3 AT);
@@ -12,8 +12,8 @@ public:
 	Camera& operator=(const Camera& other) = delete;
 
 public:
-	virtual void Render(const std::shared_ptr<class Shader>& curShader) = 0;
-	virtual void Update(float deltaTime) = 0;
+	virtual void Render(const std::shared_ptr<class Shader>& curShader);
+	virtual void Update(float deltaTime, glm::vec3 position=glm::vec3{ 0.0f }, glm::vec3 look=glm::vec3{0.0f});
 
 	const glm::mat4* GetViewPtr() { return &mView; };
 	const glm::mat4* GetProjectionPtr() { return &mProjection; };
@@ -50,21 +50,7 @@ protected:
 
 	glm::mat4 mRotate{ 0.f };
 	glm::vec3 mDeltaRotate{ 0.f };
-};
 
-class FreeCamera : public Camera {
-public:
-	FreeCamera(std::shared_ptr<Window> window, glm::vec3 EYE, glm::vec3 AT);
-	~FreeCamera();
-
-public:
-	virtual void Render(const std::shared_ptr<class Shader>& curShader) override;
-	virtual void Update(float deltaTime) override;
-
-private:
-	float mDeltaTime{ };
 	std::pair<glm::vec3, glm::vec3> mBoxSize{ };
 	std::pair<glm::vec3, glm::vec3> mBoundingBox{ };
-	glm::vec3 mMoveVec{ };
-	bool mCancelMove{ false };
 };

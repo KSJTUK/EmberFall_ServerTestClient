@@ -43,6 +43,7 @@ struct CubeMapInfo {
     INT32 nrChannel[SIZE]{ };
 };
 
+inline constexpr auto MOUSE_SENSITIVE = 0.03f;
 inline constexpr UINT32 INVALID_PROGRAM_ID = std::numeric_limits<UINT32>::max();
 const std::string EMPTYSTRING{ };
 const std::string SHADER_DIR{ "./Shader/" };
@@ -58,6 +59,14 @@ const std::vector<std::string> static_shader{
     EMPTYSTRING,
     EMPTYSTRING,
     "static_fragment_shader.glsl"
+};
+
+const std::vector<std::string> light_object_shader{
+    "lighting_object_vs.glsl",
+    EMPTYSTRING,
+    EMPTYSTRING,
+    EMPTYSTRING,
+    "lighting_object_fs.glsl"
 };
 
 struct Vertex {

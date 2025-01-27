@@ -115,6 +115,10 @@ INT32 Shader::GetUniformLocation(const std::string& locationName) {
 	return location;
 }
 
+UINT32 Shader::GetId() const {
+	return mId;
+}
+
 void Shader::CreateShaders(const std::vector<std::string>& files) {
 	std::array<UINT, 5> programIds{ INVALID_PROGRAM_ID };
 

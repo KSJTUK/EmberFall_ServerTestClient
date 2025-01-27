@@ -77,6 +77,9 @@
     <ClCompile Include="GameFrame.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -130,12 +133,21 @@
     <ClInclude Include="GameFrame.h">
       <Filter>game</Filter>
     </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\static_fragment_shader.glsl">
       <Filter>Shader</Filter>
     </None>
     <None Include="shader\static_vertex_shader.glsl">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="lighting_object_vs.glsl">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="lighting_object_fs.glsl">
       <Filter>Shader</Filter>
     </None>
   </ItemGroup>

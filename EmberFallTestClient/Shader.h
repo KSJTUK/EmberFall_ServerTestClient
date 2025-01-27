@@ -34,6 +34,7 @@ private:
     void CreateShaders(const std::vector<std::string>& files);
     UINT32 CreateShader(const std::string& shaderPath, UINT32 shaderType);
     INT32 GetUniformLocation(const std::string& locationName);
+    UINT32 GetId() const;
 
 private:
     UINT32 mId{ };

@@ -23,6 +23,7 @@ public:
 	LightType GetType() const;
 	glm::vec3& GetDirLightAmbient() { return mAmbient; }
 	glm::vec3& GetDirLightColor() { return mLightColor; }
+	glm::vec3 GetPosition();
 
 	void ChangeDirection(const glm::vec3& direction);
 
@@ -57,10 +58,7 @@ public:
 	void SetModel(std::shared_ptr<class Model> lightModel);
 
 public:
-	void Render(const std::shared_ptr<Shader>& curShader);
-
-private:
-	std::shared_ptr<class Model> mLightModel{ nullptr };
+	virtual void Render(const std::shared_ptr<Shader>& curShader) override;
 };
 
 class SpotLight : public Light {
@@ -71,7 +69,7 @@ public:
 public:
 	void SetOutterCutOff(float cutOff, float outterCutoff);
 
-	void Render(const std::shared_ptr<Shader>& curShader);
+	virtual void Render(const std::shared_ptr<Shader>& curShader) override;
 
 private:
 	float mCutOff{ std::cosf(glm::radians(12.5f)) };
@@ -91,5 +89,5 @@ public:
 	void DayUpdate(float deltaTime);
 
 public:
-	void Render(const std::shared_ptr<Shader>& curShader);
+	virtual void Render(const std::shared_ptr<Shader>& curShader) override;
 };
