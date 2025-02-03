@@ -63,6 +63,10 @@ void Transform::SetRotation(const SimpleMath::Quaternion& quat) {
     mRotation = quat;
 }
 
+void Transform::SetWorld(const SimpleMath::Matrix& world) {
+    mWorld = world;
+}
+
 void Transform::Translate(const SimpleMath::Vector3& v) {
     mPosition += v;
 }
@@ -97,7 +101,7 @@ void Transform::Scale(const SimpleMath::Vector3& v) {
 }
 
 void Transform::Update() {
-    mWorld = SimpleMath::Matrix::CreateScale(mScale)
-        * SimpleMath::Matrix::CreateFromQuaternion(mRotation)
-        * SimpleMath::Matrix::CreateTranslation(mPosition);
+    //mWorld = SimpleMath::Matrix::CreateScale(mScale)
+    //    * SimpleMath::Matrix::CreateFromQuaternion(mRotation)
+    //    * SimpleMath::Matrix::CreateTranslation(mPosition);
 }

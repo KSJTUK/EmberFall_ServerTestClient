@@ -21,7 +21,7 @@
 #pragma comment(lib, "../External/Lib/ServerLib/Release/ServerLib.lib")
 #endif
 
-#define STAND_ALONE
+//#define STAND_ALONE
 
 struct Meterials {
     glm::vec3 specular{ };

@@ -8,7 +8,7 @@ TestComponent::~TestComponent() { }
 
 void TestComponent::Update(const float deltaTime, GameObject& obj) {
     auto& transform = obj.GetTransform();
-    transform.Rotate(deltaTime, 0.0f, 0.0f);
+    transform.Rotate(deltaTime, deltaTime, deltaTime);
 }
 
 std::shared_ptr<Component> TestComponent::Clone() {

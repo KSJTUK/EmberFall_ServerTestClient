@@ -24,31 +24,31 @@ GameScene::GameScene(std::shared_ptr<Window> mainWindow)
     auto globalLight = std::make_shared<DirectionLight>();
     globalLight->ChangeDirection(glm::vec3{ 0.0f, -1.0f, -1.0f });
     globalLight->SetLinearQuadrant(0.0f, 0.0f);
-    mainShader->RegisterLights({ pointLight, globalLight });
+    mainShader->RegisterLights({ pointLight });
 
     auto player = std::make_shared<GameObject>(std::make_shared<Model>("object/cube.obj", "textures/container.jpg"), glm::vec3{ 0.0f, 0.0f, 5.0f });
     player->CreateComponent<InputComponent>();
     player->ResetCamera(mCamera);
 
-    auto object2 = std::make_shared<GameObject>(std::make_shared<Model>("object/cube.obj", "textures/container.jpg"), glm::vec3{ 0.0f, 0.0f, 0.0f });
-    object2->CreateComponent<TestComponent>();
-
     auto cube = std::make_shared<Model>("object/cube.obj");
     pointLight->SetModel(cube);
         
-    mPlayers.emplace(player->GetId(), player);
-    mObjects.emplace_back(object2);
-    mainShader->RegisterRenderingObject({ player, object2 });
+    mPlayers.emplace(player->GetId(), player); // dummy
 
-    float dist{ 10.0f };
-    for (int i = 0; i < 1000; ++i) { // 10 * 10 * 10, 10.0f
-        SimpleMath::Vector3 distFromOrigin{ dist * (i % 10), dist * (i / 10 % 10), dist * (i / 100) };
-        auto newObj = object2->Clone();
-        newObj->SetPosition(distFromOrigin);
-        distFromOrigin.Normalize();
-        object2->SetColor(distFromOrigin);
-        mObjects.push_back(newObj);
-    }
+    //auto obj = std::make_shared<GameObject>(std::make_shared<Model>("object/cube.obj", "textures/container.jpg"), glm::vec3{ 0.0f, 0.0f, 0.0f });
+    //obj->CreateComponent<TestComponent>();
+    //mObjects.emplace_back(obj);
+    //mainShader->RegisterRenderingObject({ obj });
+
+    //float dist{ 10.0f };
+    //for (int i = 0; i < 1000; ++i) { // 10 * 10 * 10, 10.0f
+    //    SimpleMath::Vector3 distFromOrigin{ dist * (i % 10), dist * (i / 10 % 10), dist * (i / 100) };
+    //    auto newObj = obj->Clone();
+    //    newObj->SetPosition(distFromOrigin);
+    //    distFromOrigin.Normalize();
+    //    obj->SetColor(distFromOrigin);
+    //    mObjects.push_back(newObj);
+    //}
 
     mainShader->SetCamera(mCamera);
 
@@ -68,25 +68,34 @@ void GameScene::ProcessPackets(const std::shared_ptr<ClientCore>& core) {
         buffer.Read(header);
         switch (header.type) {
         case PacketType::PT_NOTIFYING_ID:
+            {
+                PacketNotifyId id;
+                buffer.Read(id);
+            }
             std::cout << std::format("INIT SESSION ID : {}\n", header.id);
             core->InitSessionId(header.id);
             myId = header.id;
+
+            mPlayers[myId] = mPlayers[255];
+            mShaders["mainShader"]->RegisterRenderingObject(mPlayers[myId]);
             break;
 
         case PacketType::PT_GAMEOBJ_SC:
             std::cout << std::format("OBJECT Info: {}\n", header.id);
             {
+                PacketGameObj objPacket{ };
+                buffer.Read(objPacket);
                 auto it = mPlayers.find(header.id);
                 if (mPlayers.end() == it) {
                     mPlayers[header.id] = mPlayers[myId]->Clone();
                 }
 
-                //mPlayers[header.id] = 
+                mPlayers[header.id]->UpdateWorld(objPacket.world);
             }
             break;
 
         default:
-            std::cout << "PACKET ERROR" << std::endl;
+            std::cout << "PACKET ERROR Size:" << static_cast<INT32>(header.size) << " PacketType: " << static_cast<INT32>(header.type) << std::endl;
             break;
         }
     }

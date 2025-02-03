@@ -11,31 +11,31 @@ void InputComponent::Update(const float deltaTime, GameObject& obj) {
     static SimpleMath::Vector2 rotAngle{ };
 
     auto& transform = obj.GetTransform();
-    auto speed = obj.GetSpeed();
-    SimpleMath::Vector3 moveVec{ };
-    if (Key::DOWN == Input::GetState(GLFW_KEY_W)) {
-        moveVec.z -= speed * deltaTime;
-    }
+    //auto speed = obj.GetSpeed();
+    //SimpleMath::Vector3 moveVec{ };
+    //if (Key::DOWN == Input::GetState(GLFW_KEY_W)) {
+    //    moveVec.z -= speed * deltaTime;
+    //}
 
-    if (Key::DOWN == Input::GetState(GLFW_KEY_S)) {
-        moveVec.z += speed * deltaTime;
-    }
+    //if (Key::DOWN == Input::GetState(GLFW_KEY_S)) {
+    //    moveVec.z += speed * deltaTime;
+    //}
 
-    if (Key::DOWN == Input::GetState(GLFW_KEY_A)) {
-        moveVec.x -= speed * deltaTime;
-    }
+    //if (Key::DOWN == Input::GetState(GLFW_KEY_A)) {
+    //    moveVec.x -= speed * deltaTime;
+    //}
 
-    if (Key::DOWN == Input::GetState(GLFW_KEY_D)) {
-        moveVec.x += speed * deltaTime;
-    }
+    //if (Key::DOWN == Input::GetState(GLFW_KEY_D)) {
+    //    moveVec.x += speed * deltaTime;
+    //}
 
-    if (Key::DOWN == Input::GetState(GLFW_KEY_E)) {
-        moveVec.y -= speed * deltaTime;
-    }
+    //if (Key::DOWN == Input::GetState(GLFW_KEY_E)) {
+    //    moveVec.y -= speed * deltaTime;
+    //}
 
-    if (Key::DOWN == Input::GetState(GLFW_KEY_Q)) {
-        moveVec.y += speed * deltaTime;
-    }
+    //if (Key::DOWN == Input::GetState(GLFW_KEY_Q)) {
+    //    moveVec.y += speed * deltaTime;
+    //}
 
     SimpleMath::Vector2 deltaMouse = Input::GetDeltaMouse();
     SimpleMath::Vector2 deltaRotate{ 0.0f };
@@ -45,6 +45,7 @@ void InputComponent::Update(const float deltaTime, GameObject& obj) {
         deltaRotate.y = glm::radians(-deltaMouse.y * MOUSE_SENSITIVE);
 
         rotAngle += deltaRotate;
+        std::cout << rotAngle.x << ", " << rotAngle.y << std::endl;
         rotAngle.y = std::clamp(rotAngle.y, -DirectX::XM_PIDIV2 + 0.1f, DirectX::XM_PIDIV2 - 0.1f);
 
         cameraRotate = SimpleMath::Quaternion::CreateFromAxisAngle(SimpleMath::Vector3::Up, rotAngle.x);
@@ -53,7 +54,7 @@ void InputComponent::Update(const float deltaTime, GameObject& obj) {
         transform.SetRotation(cameraRotate);
     }
 
-    transform.Move(moveVec);
+    //transform.Move(moveVec);
 }
 
 std::shared_ptr<Component> InputComponent::Clone() {

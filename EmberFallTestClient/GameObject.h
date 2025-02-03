@@ -25,6 +25,7 @@ public:
         mComponents.push_back(component);
     }
 
+    void UpdateWorld(const SimpleMath::Matrix& world);
     void ResetCamera(std::shared_ptr<class Camera> camera=nullptr);
     void ResetModel(std::shared_ptr<class Model> model=nullptr);
     void ResetShader(std::shared_ptr<class Shader> shader);

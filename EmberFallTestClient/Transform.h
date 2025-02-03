@@ -28,6 +28,7 @@ public:
 
     void SetPosition(const SimpleMath::Vector3& pos);
     void SetRotation(const SimpleMath::Quaternion& quat);
+    void SetWorld(const SimpleMath::Matrix& world);
 
     void Translate(const SimpleMath::Vector3& v);
     void Move(const SimpleMath::Vector3& moveVec);

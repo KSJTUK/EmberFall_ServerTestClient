@@ -45,6 +45,10 @@ void GameObject::SetColor(const SimpleMath::Vector3& color) {
     mColor = color;
 }
 
+void GameObject::UpdateWorld(const SimpleMath::Matrix& world) {
+    mTransform.SetWorld(world);
+}
+
 void GameObject::ResetCamera(std::shared_ptr<class Camera> camera) {
     mCamera = camera;
 }
