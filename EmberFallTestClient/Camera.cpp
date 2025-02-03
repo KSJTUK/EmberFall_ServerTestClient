@@ -39,6 +39,7 @@ void Camera::Update(float deltaTime, const SimpleMath::Vector3& position, const 
 
 	if (false == IsVector3Zero(look)) {
 		mAt = look;
+		mAt.Normalize();
 		UpdateBasisAxis();
 	}
 

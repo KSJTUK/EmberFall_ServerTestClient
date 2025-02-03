@@ -8,7 +8,7 @@ InputComponent::InputComponent() { }
 InputComponent::~InputComponent() { }
 
 void InputComponent::Update(const float deltaTime, GameObject& obj) {
-    static float rotY{ };
+    static SimpleMath::Vector2 rotAngle{ };
 
     auto& transform = obj.GetTransform();
     auto speed = obj.GetSpeed();
@@ -37,29 +37,23 @@ void InputComponent::Update(const float deltaTime, GameObject& obj) {
         moveVec.y += speed * deltaTime;
     }
 
-    glm::vec2 deltaMouse = Input::GetDeltaMouse();
-    glm::vec3 deltaRotate{ 0.0f };
-    SimpleMath::Quaternion cameraRotate{ SimpleMath::Quaternion::Identity };
+    SimpleMath::Vector2 deltaMouse = Input::GetDeltaMouse();
+    SimpleMath::Vector2 deltaRotate{ 0.0f };
     if (Input::GetState(GLFW_MOUSE_BUTTON_2)) {
+        SimpleMath::Quaternion cameraRotate{ SimpleMath::Quaternion::Identity };
         deltaRotate.x = glm::radians(-deltaMouse.x * MOUSE_SENSITIVE);
         deltaRotate.y = glm::radians(-deltaMouse.y * MOUSE_SENSITIVE);
 
-        rotY += deltaRotate.y;
-        if (rotY < -DirectX::XM_PIDIV2 + 0.5f or rotY > DirectX::XM_PIDIV2 - 0.5f) {
-            std::cout << glm::degrees(rotY) << std::endl;
-            rotY -= deltaRotate.y;
-            deltaRotate.y = 0.0f;
-        }
+        rotAngle += deltaRotate;
+        rotAngle.y = std::clamp(rotAngle.y, -DirectX::XM_PIDIV2 + 0.1f, DirectX::XM_PIDIV2 - 0.1f);
 
-        cameraRotate = SimpleMath::Quaternion::CreateFromAxisAngle(SimpleMath::Vector3::Up, deltaRotate.x);
-        cameraRotate = SimpleMath::Quaternion::CreateFromAxisAngle(SimpleMath::Vector3::Right, deltaRotate.y) * cameraRotate;
-        if (std::fabs(deltaRotate.x) > DirectX::XM_PIDIV2) {
-            std::cout << deltaRotate.x << std::endl;;
-        }
+        cameraRotate = SimpleMath::Quaternion::CreateFromAxisAngle(SimpleMath::Vector3::Up, rotAngle.x);
+        cameraRotate = SimpleMath::Quaternion::CreateFromAxisAngle(SimpleMath::Vector3::Right, rotAngle.y) * cameraRotate;
+        cameraRotate.Normalize();
+        transform.SetRotation(cameraRotate);
     }
 
     transform.Move(moveVec);
-    transform.Rotate(cameraRotate);
 }
 
 std::shared_ptr<Component> InputComponent::Clone() {

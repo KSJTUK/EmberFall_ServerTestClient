@@ -21,14 +21,13 @@ public:
 public:
 	void UpdateBasisAxis();
 
-protected:
+private:
 	// To get aspect
 	std::shared_ptr<Window> mWindow{};
 
 	glm::mat4 mProjection{ identity };
 	glm::mat4 mView{ identity };
 
-protected:
 	SimpleMath::Vector3 mEye{};
 	SimpleMath::Vector3 mAt{};
 	SimpleMath::Vector3 mUp{ 0.f,1.f,0.f };

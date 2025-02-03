@@ -41,18 +41,18 @@ void Texture::LoadTexture(const std::string& textureFilePath, bool flipImageOnLo
 
 	stbi_image_free(imageData);
 
-	m_textures.push_back(texInfo);
+	mTextures.push_back(texInfo);
 }
 
 void Texture::BindingTexture(int textureIndex) {
 	glActiveTexture(GL_TEXTURE0 + textureIndex);
-	glBindTexture(GL_TEXTURE_2D, m_textures[textureIndex].id);
+	glBindTexture(GL_TEXTURE_2D, mTextures[textureIndex].id);
 }
 
 void Texture::BindingTextures() {
-	for (int i = 0; i < m_textures.size(); ++i) {
+	for (int i = 0; i < mTextures.size(); ++i) {
 		glActiveTexture(GL_TEXTURE0 + i);
-		glBindTexture(GL_TEXTURE_2D, m_textures[i].id);
+		glBindTexture(GL_TEXTURE_2D, mTextures[i].id);
 	}
 }
 
@@ -118,17 +118,17 @@ std::vector<std::vector<float>> Texture::LoadHeightMap(const std::string& height
 
 	stbi_image_free(imageData);
 
-	m_textures.push_back(texInfo);
+	mTextures.push_back(texInfo);
 
 	return heights;
 }
 
 UINT32 Texture::GetTextureID(int textureIndex) {
-	return m_textures[textureIndex].id;
+	return mTextures[textureIndex].id;
 }
 
 const TextureInfo& Texture::GetTextureInfo(int textureIndex) const {
-	return m_textures[textureIndex];
+	return mTextures[textureIndex];
 }
 
 CubeMapTexture::CubeMapTexture() { }
@@ -187,12 +187,12 @@ void CubeMapTexture::LoadCubeMapTexture(const std::string& posX, const std::stri
 	}
 	SetCubeMapTextureOption();
 
-	m_cubeMaps.push_back(texInfo);
+	mCubeMaps.push_back(texInfo);
 }
 
 void CubeMapTexture::BindCubeMap(int cubeMapIndex) {
 	glActiveTexture(GL_TEXTURE0 + cubeMapIndex);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, m_cubeMaps[cubeMapIndex].id);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, mCubeMaps[cubeMapIndex].id);
 }
 
 void CubeMapTexture::UnBindCubeMap() {

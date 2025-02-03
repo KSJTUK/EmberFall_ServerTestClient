@@ -10,7 +10,7 @@ bool Input::GetState(KeyType key) {
     return mKeyStates[key];
 }
 
-glm::vec2 Input::GetDeltaMouse() {
+SimpleMath::Vector2 Input::GetDeltaMouse() {
     return mDeltaMouse;
 }
 

@@ -18,8 +18,8 @@ public:
 	const TextureInfo& GetTextureInfo(int textureIndex) const;
 
 private:
-	std::vector<TextureInfo> m_textures{ };
-	std::vector<CubeMapInfo> m_cubeMaps{ };
+	std::vector<TextureInfo> mTextures{ };
+	std::vector<CubeMapInfo> mCubeMaps{ };
 };
 
 class CubeMapTexture {
@@ -37,5 +37,5 @@ public:
 	void UnBindCubeMap();
 
 private:
-	std::vector<CubeMapInfo> m_cubeMaps{ };
+	std::vector<CubeMapInfo> mCubeMaps{ };
 };
