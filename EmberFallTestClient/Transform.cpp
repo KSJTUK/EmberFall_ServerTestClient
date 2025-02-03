@@ -5,66 +5,80 @@ Transform::Transform() { }
 
 Transform::~Transform() { }
 
-Transform::Transform(const Transform& other) {
-    ::memcpy(this, &other, sizeof(Transform));
-}
+Transform::Transform(const Transform& other)
+    : mPosition{ other.mPosition }, mRotation{ other.mRotation }, mScale{ other.mScale } { }
 
-Transform::Transform(Transform&& other) noexcept {
-    ::memcpy(this, &other, sizeof(Transform));
-}
+Transform::Transform(Transform&& other) noexcept
+    : mPosition{ other.mPosition }, mRotation{ other.mRotation }, mScale{ other.mScale } { }
 
 Transform& Transform::operator=(const Transform& other) {
-    ::memcpy(this, &other, sizeof(Transform));
+    mPosition = other.mPosition;
+    mRotation = other.mRotation;
+    mScale = other.mScale;
+
     return *this;
 }
 
 Transform& Transform::operator=(Transform&& other) noexcept {
-    ::memcpy(this, &other, sizeof(Transform));
+    mPosition = other.mPosition;
+    mRotation = other.mRotation;
+    mScale = other.mScale;
+
     return *this;
 }
 
-glm::vec3 Transform::GetPosition() const {
+SimpleMath::Vector3 Transform::GetRight() const {
+    return DirectX::SimpleMath::Vector3::Transform(DirectX::SimpleMath::Vector3::Right, mRotation);
+}
+
+SimpleMath::Vector3 Transform::GetLook() const {
+    return DirectX::SimpleMath::Vector3::Transform(DirectX::SimpleMath::Vector3::Forward, mRotation);
+}
+
+SimpleMath::Vector3 Transform::GetPosition() const {
     return mPosition;
 }
 
-glm::vec3 Transform::GetRotation() const {
+SimpleMath::Quaternion Transform::GetRotation() const {
     return mRotation;
 }
 
-glm::vec3 Transform::GetLook() const {
-    return mLook;
-}
-
-glm::vec3 Transform::GetScale() const {
+SimpleMath::Vector3 Transform::GetScale() const {
     return mScale;
 }
 
-glm::mat4 Transform::GetWorld() const {
+SimpleMath::Matrix Transform::GetWorld() const {
     return mWorld;
 }
 
-void Transform::MoveTo(const glm::vec3& toPos) {
-    mPosition = toPos;
+void Transform::Translate(const SimpleMath::Vector3& v) {
+    mPosition += v;
 }
 
-void Transform::Move(const glm::vec3& moveVec) {
-    mPosition += moveVec;
+void Transform::Rotate(const float yaw, const float pitch, const float roll) {
+    auto yawPitchRoll = SimpleMath::Quaternion::CreateFromYawPitchRoll(yaw, pitch, roll);
+    mRotation = SimpleMath::Quaternion::Concatenate(yawPitchRoll, mRotation);
 }
 
-void Transform::Rotate(const glm::vec3& angles) {
-    mRotation += angles;
+void Transform::Rotate(const SimpleMath::Vector3& v) {
+    auto yawPitchRoll = SimpleMath::Quaternion::CreateFromYawPitchRoll(v.x, v.y, v.z);
+    mRotation = SimpleMath::Quaternion::Concatenate(yawPitchRoll, mRotation);
 }
 
-void Transform::RotateTo(const glm::vec3& toVec) { }
-
-void Transform::Look(const glm::vec3& look) {
-    mLook = look;
+void Transform::Rotate(const SimpleMath::Quaternion& quat) {
+    mRotation = SimpleMath::Quaternion::Concatenate(quat, mRotation);
 }
 
-void Transform::Scale(const glm::vec3& scale) {
-    mScale = scale;
+void Transform::RotateSmoothly(const SimpleMath::Quaternion& quat) {
+
+}
+
+void Transform::Scale(const SimpleMath::Vector3& v) {
+    mScale = v;
 }
 
 void Transform::Update() {
-    mWorld = glm::translate(mPosition) * glm::yawPitchRoll(mRotation.y, mRotation.x, mRotation.z);
+    mWorld = SimpleMath::Matrix::CreateScale(mScale)
+        * SimpleMath::Matrix::CreateFromQuaternion(mRotation)
+        * SimpleMath::Matrix::CreateTranslation(mPosition);
 }

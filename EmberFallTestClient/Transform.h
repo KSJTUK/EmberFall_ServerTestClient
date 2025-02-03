@@ -1,5 +1,12 @@
 #pragma once
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Transform.cpp
+// 2025 - 02 - 01 김성준 : 게임 오브젝트의 변환 행렬 표현을 위한 클래스 
+// 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 class Transform {
 public:
     Transform();
@@ -11,28 +18,28 @@ public:
     Transform& operator=(Transform&& other) noexcept;
 
 public:
-    glm::vec3 GetPosition() const;
-    glm::vec3 GetRotation() const;
-    glm::vec3 GetLook() const;
-    glm::vec3 GetScale() const;
-    glm::mat4 GetWorld() const;
+    SimpleMath::Vector3 GetRight() const;
+    SimpleMath::Vector3 GetLook() const;
+    SimpleMath::Vector3 GetPosition() const;
+    SimpleMath::Quaternion GetRotation() const;
+    SimpleMath::Vector3 GetScale() const;
+    SimpleMath::Matrix GetWorld() const;
 
-    void MoveTo(const glm::vec3& toPos);
-    void Move(const glm::vec3& moveVec);
-    void Rotate(const glm::vec3& angles);
-    void RotateTo(const glm::vec3& toVec);
-    void Look(const glm::vec3& look);
+    void Translate(const SimpleMath::Vector3& v);
 
-    void Scale(const glm::vec3& scale);
+    void Rotate(const float yaw = 0.0f, const float pitch = 0.0f, const float roll = 0.0f);
+    void Rotate(const SimpleMath::Vector3& v);
+    void Rotate(const SimpleMath::Quaternion& quat);
+    void RotateSmoothly(const SimpleMath::Quaternion& quat);
+
+    void Scale(const SimpleMath::Vector3& v);
 
     void Update();
 
 private:
-    glm::vec3 mLook{ 0.0f, 0.0f, -1.0f };
-    glm::vec3 mPosition{ 0.0f };
-    glm::vec3 mRotation{ 0.0f };
-    glm::vec3 mScale{ 1.0f, 1.0f, 1.0f };
+    SimpleMath::Vector3 mPosition{ SimpleMath::Vector3::Zero };
+    SimpleMath::Quaternion mRotation{ SimpleMath::Quaternion::Identity };
+    SimpleMath::Vector3 mScale{ SimpleMath::Vector3::One };
 
-    glm::mat4 mWorld{ identity };
+    SimpleMath::Matrix mWorld{ SimpleMath::Matrix::Identity };
 };
-

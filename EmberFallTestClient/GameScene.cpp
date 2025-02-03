@@ -22,18 +22,18 @@ GameScene::GameScene(std::shared_ptr<Window> mainWindow)
     mainShader->RegisterLights({ pointLight, spotLight, globalLight });
 
     std::shared_ptr<Model> model = std::make_shared<Model>("object/cube.obj", "textures/container.jpg");
-    auto object = std::make_shared<GameObject>(model, glm::vec3{ 0.0f, 0.0f, 5.0f });
-    object->CreateComponent<InputComponent>();
-    object->ResetCamera(mCamera);
+    auto player = std::make_shared<GameObject>(model, glm::vec3{ 0.0f, 0.0f, 5.0f });
+    player->CreateComponent<InputComponent>();
+    player->ResetCamera(mCamera);
 
     auto object2 = std::make_shared<GameObject>(model, glm::vec3{ 0.0f, 0.0f, 0.0f });
 
-    mObjects.push_back(object);
-    mObjects.push_back(object2);
+    mPlayers.emplace(player->GetId(), player);
+    mObjects.emplace_back(object2);
 
     mainShader->SetCamera(mCamera);
     mainShader->RegisterLights({ pointLight, spotLight, globalLight });
-    mainShader->RegisterRenderingObject({ object, object2 });
+    mainShader->RegisterRenderingObject({ player, object2 });
 
     mShaders.insert(std::make_pair("mainShader", mainShader));
 }
@@ -42,6 +42,7 @@ GameScene::~GameScene() { }
 
 void GameScene::ProcessPackets(const std::shared_ptr<ClientCore>& core) {
 #ifndef STAND_ALONE
+    auto myId = core->GetSessionId();
     auto packetHandler = core->GetPacketHandler();
     auto& buffer = packetHandler->GetBuffer();
 
@@ -52,10 +53,23 @@ void GameScene::ProcessPackets(const std::shared_ptr<ClientCore>& core) {
         case PacketType::PT_NOTIFYING_ID:
             std::cout << std::format("INIT SESSION ID : {}\n", header.id);
             core->InitSessionId(header.id);
+            myId = header.id;
+            break;
+
+        case PacketType::PT_GAMEOBJ_SC:
+            std::cout << std::format("OBJECT Info: {}\n", header.id);
+            {
+                auto it = mPlayers.find(header.id);
+                if (mPlayers.end() == it) {
+                    mPlayers[header.id] = mPlayers[myId]->Clone();
+                }
+
+                //mPlayers[header.id] = 
+            }
             break;
 
         default:
-            std::cout << "PACKET ERROR" << std::endl;;
+            std::cout << "PACKET ERROR" << std::endl;
             break;
         }
     }
@@ -67,7 +81,7 @@ void GameScene::Update() {
 
     const float deltaTime = mMainTimer->GetDeltaTime();
     mCamera->Update(deltaTime);
-    for (auto& obj : mObjects) {
+    for (auto& [id, obj] : mPlayers) {
         obj->Update(deltaTime);
     }
 }

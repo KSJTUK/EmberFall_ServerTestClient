@@ -9,14 +9,21 @@ GameObject::GameObject(std::shared_ptr<class Model> model)
 
 GameObject::GameObject(std::shared_ptr<class Model> model, glm::vec3 position, glm::vec3 look)
     : mModel{ model } { 
-    mTransform.Move(position);
-    mTransform.RotateTo(look);
+    mTransform.Translate(ConvertVec3(position));
     if (false == glm::isCompNull(look, 0.0001f).x) {
-        mTransform.Look(look);
+        mTransform.Rotate(ConvertVec3(look));
     }
 }
 
 GameObject::~GameObject() { }
+
+void GameObject::InitId(SessionIdType id) {
+    mId = id;
+}
+
+SessionIdType GameObject::GetId() const {
+    return mId;
+}
 
 Transform& GameObject::GetTransform() {
     return mTransform;
@@ -55,8 +62,18 @@ void GameObject::Update(const float deltaTime) {
 
     mTransform.Update();
     if (nullptr != mCamera) {
-        mCamera->Update(deltaTime, mTransform.GetPosition(), mTransform.GetLook());
+        mCamera->Update(deltaTime, ConvertVec3(mTransform.GetPosition()), ConvertVec3(mTransform.GetLook()));
     }
+}
+
+std::shared_ptr<GameObject> GameObject::Clone() const {
+    auto clone = std::make_shared<GameObject>();
+    clone->mModel = mModel;
+    clone->mOwnShader = mOwnShader;
+    clone->mSpeed = mSpeed;
+    mOwnShader->RegisterRenderingObject(clone);
+
+    return clone;
 }
 
 void GameObject::Render() {
@@ -64,8 +81,12 @@ void GameObject::Render() {
         return;
     }
 
+    glm::mat4 glmWorld{ };
+    auto world = mTransform.GetWorld();
+    std::memcpy(&glmWorld, &world, sizeof(glm::mat4));
+
     BindingTexture();
-    mOwnShader->SetUniformMat4("world", GL_FALSE, mTransform.GetWorld());
+    mOwnShader->SetUniformMat4("world", GL_FALSE, glmWorld);
 
     mModel->Render();
 }

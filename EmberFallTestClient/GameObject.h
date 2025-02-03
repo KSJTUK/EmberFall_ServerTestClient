@@ -10,6 +10,8 @@ public:
     ~GameObject();
 
 public:
+    void InitId(SessionIdType id);
+    SessionIdType GetId() const;
     Transform& GetTransform();
     float GetSpeed() const;
 
@@ -25,9 +27,13 @@ public:
     void ResetShader(std::shared_ptr<class Shader> shader);
     void BindingTexture();
     void Update(const float deltaTime);
+
+    std::shared_ptr<GameObject> Clone() const;
+
     void Render();
 
 private:
+    SessionIdType mId{ INVALID_CLIENT_ID };
     std::shared_ptr<class Camera> mCamera{ };
     std::shared_ptr<class Shader> mOwnShader{ };
     std::shared_ptr<class Model> mModel{ };

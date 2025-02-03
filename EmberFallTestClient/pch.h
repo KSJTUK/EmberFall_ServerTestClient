@@ -21,7 +21,7 @@
 #pragma comment(lib, "../External/Lib/ServerLib/Release/ServerLib.lib")
 #endif
 
-//#define STAND_ALONE
+#define STAND_ALONE
 
 struct Meterials {
     glm::vec3 specular{ };
@@ -75,10 +75,20 @@ struct Vertex {
     glm::vec2 uv;
 };
 
-inline glm::mat4x4 ConvertDXMatToGLMat(SimpleMath::Matrix& mat)
+inline glm::mat4x4 ConvertDXMatToGLMat(const SimpleMath::Matrix& mat)
 {
     glm::mat4x4 glMat{ };
     SimpleMath::Matrix transposed = mat.Transpose();
     ::memcpy(&glMat, &transposed, sizeof(SimpleMath::Matrix));
     return glMat;
+}
+
+inline SimpleMath::Vector3 ConvertVec3(const glm::vec3& v)
+{
+    return SimpleMath::Vector3{ v.x, v.y, v.z };
+}
+
+inline glm::vec3 ConvertVec3(const SimpleMath::Vector3& v)
+{
+    return glm::vec3{ v.x, v.y, v.z };
 }

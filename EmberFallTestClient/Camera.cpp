@@ -45,5 +45,5 @@ void Camera::Update(float deltaTime, glm::vec3 position, glm::vec3 look) {
 		mBasisY = glm::cross(mBasisZ, mBasisX);
 	}
 
-	mView = glm::lookAt(mEye, mEye + mAt, mUp);
+	mView = glm::lookAtRH(mEye, mEye + mAt, mUp);
 }

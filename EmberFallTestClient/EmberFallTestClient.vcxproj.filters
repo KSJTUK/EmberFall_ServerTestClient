@@ -80,6 +80,9 @@
     <ClCompile Include="Transform.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="..\External\Include\DirectXTK12\SimpleMath.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
