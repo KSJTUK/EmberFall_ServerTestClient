@@ -43,3 +43,6 @@ Window::~Window() { }
 GLFWwindow* Window::GetWindow() {
 	return mWindow;
 }
+
+void Window::ResizeWindow(INT32 width, INT32 height) {
+}

@@ -6,6 +6,9 @@ public:
 
 public:
     GLFWwindow* GetWindow();
+    
+    SimpleMath::Vector2 OnResize();
+    void ResizeWindow(INT32 width, INT32 height);
 
 private:
     GLFWwindow* mWindow;

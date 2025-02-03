@@ -18,20 +18,24 @@ GameScene::GameScene(std::shared_ptr<Window> mainWindow)
     auto mainShader = std::make_shared<Shader>(static_shader);
 
     auto pointLight = std::make_shared<PointLight>();
-    pointLight->SetPosition(glm::vec3{ 3.f, 3.f, 3.f });
+    pointLight->SetPosition(glm::vec3{ -3.f, 3.f, -3.f });
+    pointLight->SetLinearQuadrant(0.0f, 0.0f);
 
-    auto spotLight = std::make_shared<SpotLight>();
     auto globalLight = std::make_shared<DirectionLight>();
-    mainShader->RegisterLights({ pointLight, spotLight, globalLight });
+    globalLight->ChangeDirection(glm::vec3{ 0.0f, -1.0f, -1.0f });
+    globalLight->SetLinearQuadrant(0.0f, 0.0f);
+    mainShader->RegisterLights({ pointLight, globalLight });
 
-    std::shared_ptr<Model> model = std::make_shared<Model>("object/cube.obj", "textures/container.jpg");
-    auto player = std::make_shared<GameObject>(model, glm::vec3{ 0.0f, 0.0f, 5.0f });
+    auto player = std::make_shared<GameObject>(std::make_shared<Model>("object/cube.obj", "textures/container.jpg"), glm::vec3{ 0.0f, 0.0f, 5.0f });
     player->CreateComponent<InputComponent>();
     player->ResetCamera(mCamera);
 
-    auto object2 = std::make_shared<GameObject>(model, glm::vec3{ 0.0f, 0.0f, 0.0f });
+    auto object2 = std::make_shared<GameObject>(std::make_shared<Model>("object/cube.obj", "textures/container.jpg"), glm::vec3{ 0.0f, 0.0f, 0.0f });
     object2->CreateComponent<TestComponent>();
 
+    auto cube = std::make_shared<Model>("object/cube.obj");
+    pointLight->SetModel(cube);
+        
     mPlayers.emplace(player->GetId(), player);
     mObjects.emplace_back(object2);
     mainShader->RegisterRenderingObject({ player, object2 });
@@ -41,11 +45,12 @@ GameScene::GameScene(std::shared_ptr<Window> mainWindow)
         SimpleMath::Vector3 distFromOrigin{ dist * (i % 10), dist * (i / 10 % 10), dist * (i / 100) };
         auto newObj = object2->Clone();
         newObj->SetPosition(distFromOrigin);
+        distFromOrigin.Normalize();
+        object2->SetColor(distFromOrigin);
         mObjects.push_back(newObj);
     }
 
     mainShader->SetCamera(mCamera);
-    mainShader->RegisterLights({ pointLight, spotLight, globalLight });
 
     mShaders.insert(std::make_pair("mainShader", mainShader));
 }

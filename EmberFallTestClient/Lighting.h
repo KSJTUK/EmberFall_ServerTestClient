@@ -59,6 +59,9 @@ public:
 
 public:
 	virtual void Render(const std::shared_ptr<Shader>& curShader) override;
+
+private:
+	std::shared_ptr<class Model> mLightModel{ nullptr };
 };
 
 class SpotLight : public Light {

@@ -167,7 +167,7 @@ void Model::SetDrawMode(int drawMode) {
 }
 
 bool Model::ExistTexture() const {
-	return bool{ mTexture };
+	return nullptr !=  mTexture ;
 }
 
 void Model::BindingTexture(int textureIndex) {

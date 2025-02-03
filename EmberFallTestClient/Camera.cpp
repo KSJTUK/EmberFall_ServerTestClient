@@ -27,6 +27,7 @@ Camera::Camera(std::shared_ptr<Window> window, const SimpleMath::Vector3& EYE, c
 }
 
 void Camera::Render(const std::shared_ptr<class Shader>& curShader) {
+	curShader->SetUniformVec3("viewPos", ConvertVec3(mEye));
 	curShader->SetUniformMat4("viewProj", GL_FALSE, mProjection * mView);
 }
 

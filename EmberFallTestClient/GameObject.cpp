@@ -41,6 +41,10 @@ void GameObject::SetPosition(const SimpleMath::Vector3& pos) {
     mTransform.SetPosition(pos);
 }
 
+void GameObject::SetColor(const SimpleMath::Vector3& color) {
+    mColor = color;
+}
+
 void GameObject::ResetCamera(std::shared_ptr<class Camera> camera) {
     mCamera = camera;
 }
@@ -53,8 +57,13 @@ void GameObject::ResetShader(std::shared_ptr<Shader> shader) {
     mOwnShader = shader;
 }
 
+void GameObject::IsLightObj() {
+    mLightObj = true;
+}
+
 void GameObject::BindingTexture() {
     if (mModel->ExistTexture()) {
+        mTextured = true;
         mModel->BindingTexture(0);
     }
 }
@@ -75,6 +84,8 @@ std::shared_ptr<GameObject> GameObject::Clone() const {
     clone->mModel = mModel;
     clone->mOwnShader = mOwnShader;
     clone->mSpeed = mSpeed;
+    clone->mColor = mColor;
+    clone->mLightObj = mLightObj;
     for (auto& component : mComponents) {
         clone->SetComponent(component);
     }
@@ -94,6 +105,11 @@ void GameObject::Render() {
     std::memcpy(&glmWorld, &world, sizeof(glm::mat4));
 
     BindingTexture();
+    mOwnShader->SetUniformInt("textured", static_cast<int>(mTextured));
+    mOwnShader->SetUniformInt("lightObj", static_cast<int>(mLightObj));
+    if (false == mTextured) {
+        mOwnShader->SetUniformVec3("objColor", ConvertVec3(mColor));
+    }
     mOwnShader->SetUniformMat4("world", GL_FALSE, glmWorld);
 
     mModel->Render();

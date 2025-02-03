@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Lighting.h"
 #include "Shader.h"
+#include "Model.h"
 
 Light::Light(LightType type)
 	: mType{ type } { }
@@ -42,6 +43,7 @@ PointLight::PointLight() : Light{ LightType::POINT } { }
 PointLight::~PointLight() { }
 
 void PointLight::SetModel(std::shared_ptr<class Model> lightModel) {
+	mLightModel = lightModel;
 }
 
 void PointLight::Render(const std::shared_ptr<Shader>& curShader) {
@@ -54,6 +56,15 @@ void PointLight::Render(const std::shared_ptr<Shader>& curShader) {
 	curShader->SetUniformFloat("pointLight.constant", mConstant);
 	curShader->SetUniformFloat("pointLight.linear", mLinear);
 	curShader->SetUniformFloat("pointLight.quadratic", mQuadratic);
+
+	curShader->SetUniformInt("textured", 0);
+	curShader->SetUniformInt("lightObj", 1);
+	curShader->SetUniformVec3("objColor", mLightColor);
+	
+	auto world = glm::translate(mLightPosition);
+	curShader->SetUniformMat4("world", GL_FALSE, world);
+
+	mLightModel->Render();
 }
 
 SpotLight::SpotLight() : Light{ LightType::SPOT } { }

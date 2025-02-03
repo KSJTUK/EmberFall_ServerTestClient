@@ -16,7 +16,7 @@ out vec3 fragPos;
 void main(void)
 {
 	fragPos = vec3(world * vec4(in_Position, 1.0f));
-	normal = normalize(in_Normal);
+	normal = mat3(world) * in_Normal;
 	texCoords = in_Texture;
 
 	gl_Position = viewProj * vec4(fragPos, 1.0f);
