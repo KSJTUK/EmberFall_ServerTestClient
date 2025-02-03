@@ -8,42 +8,50 @@
 
 constexpr auto CAMERA_SPEED = 20.f;
 
-Camera::Camera(std::shared_ptr<Window> window, glm::vec3 EYE, glm::vec3 AT) : mWindow(window), mEye(EYE), mAt(AT) {
+Camera::Camera(std::shared_ptr<Window> window, const SimpleMath::Vector3& EYE, const SimpleMath::Vector3& AT) 
+	: mWindow{ window }, mEye{ EYE }, mAt{ AT } {
 	int width, height;
 	glfwGetFramebufferSize(mWindow->GetWindow(), &width, &height);
 	mAspect = static_cast<float>(width) / static_cast<float>(height);
 
-	mBasisZ = glm::normalize(-mAt);
-	mBasisX = glm::normalize(glm::cross(mUp, mBasisZ));
-	mBasisY = glm::cross(mBasisZ, mBasisX);
+	mAt.Normalize();
+	mBasisZ = mAt;
+
+	mBasisX = mUp.Cross(mBasisZ);
+	mBasisX.Normalize();
+
+	mBasisY = mBasisZ.Cross(mBasisX);
+	mBasisY.Normalize();
 
 	mProjection = glm::perspective(mFovY, mAspect, mNearZ, mFarZ);
-
-	float boxHalfWidth{ 6.f / 2.f };
-	float boxHeight{ 17.f };
-	mBoxSize.first = { glm::vec3{ boxHalfWidth, boxHeight, boxHalfWidth } };
-	mBoxSize.second = { glm::vec3{ boxHalfWidth, 0.f, boxHalfWidth} };
-	mBoundingBox.first = mEye - mBoxSize.first;
-	mBoundingBox.second = mEye + mBoxSize.second;
 }
 
 void Camera::Render(const std::shared_ptr<class Shader>& curShader) {
 	curShader->SetUniformMat4("viewProj", GL_FALSE, mProjection * mView);
 }
 
-void Camera::Update(float deltaTime, glm::vec3 position, glm::vec3 look) {
+void Camera::Update(float deltaTime, const SimpleMath::Vector3& position, const SimpleMath::Vector3& look) {
 	int width, height;
 	glfwGetFramebufferSize(mWindow->GetWindow(), &width, &height);
 	mAspect = static_cast<float>(width) / static_cast<float>(height);
 
     mEye = position;
 
-	if (false == glm::isCompNull(look, 0.001f).x) {
-		mAt = glm::normalize(look);
-		mBasisZ = glm::normalize(-mAt);
-		mBasisX = glm::normalize(glm::cross(mUp, mBasisZ));
-		mBasisY = glm::cross(mBasisZ, mBasisX);
+	if (false == IsVector3Zero(look)) {
+		mAt = look;
+		UpdateBasisAxis();
 	}
 
-	mView = glm::lookAtRH(mEye, mEye + mAt, mUp);
+	mView = ConvertDXMatToGLMat(DirectX::XMMatrixLookAtRH(mEye, mEye + mAt, mUp));
+}
+
+void Camera::UpdateBasisAxis() {
+	mAt.Normalize();
+	mBasisZ = mAt;
+
+	mBasisX = mUp.Cross(mBasisZ);
+	mBasisX.Normalize();
+
+	mBasisY = mBasisZ.Cross(mBasisX);
+	mBasisY.Normalize();
 }

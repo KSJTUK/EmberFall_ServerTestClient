@@ -1,6 +1,6 @@
 #pragma once
 
-#include "InputComponent.h"
+#include "Component.h"
 #include "Transform.h"
 
 class GameObject {
@@ -16,6 +16,8 @@ public:
     float GetSpeed() const;
 
     void SetComponent(std::shared_ptr<Component> component);
+    void SetPosition(const SimpleMath::Vector3& pos);
+
     template <typename T> requires std::derived_from<T, Component>
     void CreateComponent() {
         auto component = std::make_shared<T>();

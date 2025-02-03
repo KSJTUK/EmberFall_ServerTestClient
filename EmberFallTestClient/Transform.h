@@ -20,12 +20,16 @@ public:
 public:
     SimpleMath::Vector3 GetRight() const;
     SimpleMath::Vector3 GetLook() const;
+    SimpleMath::Vector3 GetUp() const;
     SimpleMath::Vector3 GetPosition() const;
     SimpleMath::Quaternion GetRotation() const;
     SimpleMath::Vector3 GetScale() const;
     SimpleMath::Matrix GetWorld() const;
 
+    void SetPosition(const SimpleMath::Vector3& pos);
+
     void Translate(const SimpleMath::Vector3& v);
+    void Move(const SimpleMath::Vector3& moveVec);
 
     void Rotate(const float yaw = 0.0f, const float pitch = 0.0f, const float roll = 0.0f);
     void Rotate(const SimpleMath::Vector3& v);

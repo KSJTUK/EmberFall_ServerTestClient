@@ -5,7 +5,7 @@ class Window;
 class Camera {
 public:
 	Camera() = default;
-	Camera(std::shared_ptr<Window> window, glm::vec3 EYE, glm::vec3 AT);
+	Camera(std::shared_ptr<Window> window, const SimpleMath::Vector3& EYE, const SimpleMath::Vector3& AT);
 
 	~Camera() = default;
 	Camera(const Camera& other) = delete;
@@ -13,18 +13,13 @@ public:
 
 public:
 	virtual void Render(const std::shared_ptr<class Shader>& curShader);
-	virtual void Update(float deltaTime, glm::vec3 position=glm::vec3{ 0.0f }, glm::vec3 look=glm::vec3{0.0f});
+	virtual void Update(float deltaTime, const SimpleMath::Vector3& position=SimpleMath::Vector3::Zero, const SimpleMath::Vector3& look=SimpleMath::Vector3::Zero);
 
-	const glm::mat4* GetViewPtr() { return &mView; };
-	const glm::mat4* GetProjectionPtr() { return &mProjection; };
-	const glm::mat4* GetRotateMatPtr() { return &mRotate; };
-	const glm::vec3* GetPositionPtr() { return &mEye; };
-	const glm::vec3* GetBasisZPtr() { return &mBasisZ; };
-	const glm::vec3* GetBasisYPtr() { return &mBasisY; };
-	const glm::vec3* GetBasisXPtr() { return &mBasisX; };
-	glm::vec3 GetDeltaAngle() { return mDeltaRotate; }
-	glm::vec3 GetViewPoint() const { return mAt; }
-	glm::vec3& GetPosition() { return mEye; }
+	SimpleMath::Vector3 GetViewPoint() const { return mAt; }
+	SimpleMath::Vector3 GetPosition() { return mEye; }
+
+public:
+	void UpdateBasisAxis();
 
 protected:
 	// To get aspect
@@ -34,9 +29,9 @@ protected:
 	glm::mat4 mView{ identity };
 
 protected:
-	glm::vec3 mEye{};
-	glm::vec3 mAt{};
-	glm::vec3 mUp{ 0.f,1.f,0.f };
+	SimpleMath::Vector3 mEye{};
+	SimpleMath::Vector3 mAt{};
+	SimpleMath::Vector3 mUp{ 0.f,1.f,0.f };
 
 	float mFovY = 45.f;
 	float mNearZ = 0.1f;
@@ -44,13 +39,7 @@ protected:
 
 	float mAspect{};
 
-	glm::vec3 mBasisX{ 1.f,0.f,0.f };
-	glm::vec3 mBasisY{ 0.f,1.f,0.f };
-	glm::vec3 mBasisZ{ 0.f,0.f,1.f };
-
-	glm::mat4 mRotate{ 0.f };
-	glm::vec3 mDeltaRotate{ 0.f };
-
-	std::pair<glm::vec3, glm::vec3> mBoxSize{ };
-	std::pair<glm::vec3, glm::vec3> mBoundingBox{ };
+	SimpleMath::Vector3 mBasisX{ 1.f,0.f,0.f };
+	SimpleMath::Vector3 mBasisY{ 0.f,1.f,0.f };
+	SimpleMath::Vector3 mBasisZ{ 0.f,0.f,1.f };
 };

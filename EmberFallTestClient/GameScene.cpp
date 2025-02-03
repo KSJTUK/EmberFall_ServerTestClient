@@ -9,9 +9,12 @@
 #include "GameObject.h"
 #include "GameTimer.h"
 
+#include "InputComponent.h"
+#include "TestComponent.h"
+
 GameScene::GameScene(std::shared_ptr<Window> mainWindow)
     : mMainWindow{ mainWindow }, mMainTimer{ std::make_unique<GameTimer>() },
-    mCamera{ std::make_shared<Camera>(mMainWindow, glm::vec3{ 0.0f, 0.0f, -5.0f }, glm::vec3{ 0.0f, 0.0f, -1.0f }) } {
+    mCamera{ std::make_shared<Camera>(mMainWindow, SimpleMath::Vector3{ 0.0f, 0.0f, -5.0f }, SimpleMath::Vector3{ 0.0f, 0.0f, -1.0f }) } {
     auto mainShader = std::make_shared<Shader>(static_shader);
 
     auto pointLight = std::make_shared<PointLight>();
@@ -27,13 +30,22 @@ GameScene::GameScene(std::shared_ptr<Window> mainWindow)
     player->ResetCamera(mCamera);
 
     auto object2 = std::make_shared<GameObject>(model, glm::vec3{ 0.0f, 0.0f, 0.0f });
+    object2->CreateComponent<TestComponent>();
 
     mPlayers.emplace(player->GetId(), player);
     mObjects.emplace_back(object2);
+    mainShader->RegisterRenderingObject({ player, object2 });
+
+    float dist{ 10.0f };
+    for (int i = 0; i < 1000; ++i) { // 10 * 10 * 10, 10.0f
+        SimpleMath::Vector3 distFromOrigin{ dist * (i % 10), dist * (i / 10 % 10), dist * (i / 100) };
+        auto newObj = object2->Clone();
+        newObj->SetPosition(distFromOrigin);
+        mObjects.push_back(newObj);
+    }
 
     mainShader->SetCamera(mCamera);
     mainShader->RegisterLights({ pointLight, spotLight, globalLight });
-    mainShader->RegisterRenderingObject({ player, object2 });
 
     mShaders.insert(std::make_pair("mainShader", mainShader));
 }
@@ -82,6 +94,10 @@ void GameScene::Update() {
     const float deltaTime = mMainTimer->GetDeltaTime();
     mCamera->Update(deltaTime);
     for (auto& [id, obj] : mPlayers) {
+        obj->Update(deltaTime);
+    }
+
+    for (auto& obj : mObjects) {
         obj->Update(deltaTime);
     }
 }

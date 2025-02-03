@@ -43,7 +43,9 @@ struct CubeMapInfo {
     INT32 nrChannel[SIZE]{ };
 };
 
-inline constexpr auto MOUSE_SENSITIVE = 0.03f;
+inline constexpr auto MOUSE_SENSITIVE = 0.09f;
+inline constexpr auto EPSILON = std::numeric_limits<float>::epsilon();
+inline constexpr auto EPSOLON_VEC3 = SimpleMath::Vector3{ EPSILON, EPSILON, EPSILON };
 inline constexpr UINT32 INVALID_PROGRAM_ID = std::numeric_limits<UINT32>::max();
 const std::string EMPTYSTRING{ };
 const std::string SHADER_DIR{ "./Shader/" };
@@ -75,11 +77,10 @@ struct Vertex {
     glm::vec2 uv;
 };
 
-inline glm::mat4x4 ConvertDXMatToGLMat(const SimpleMath::Matrix& mat)
+inline glm::mat4 ConvertDXMatToGLMat(const SimpleMath::Matrix& mat)
 {
-    glm::mat4x4 glMat{ };
-    SimpleMath::Matrix transposed = mat.Transpose();
-    ::memcpy(&glMat, &transposed, sizeof(SimpleMath::Matrix));
+    glm::mat4 glMat{ };
+    ::memcpy(&glMat, &mat, sizeof(SimpleMath::Matrix));
     return glMat;
 }
 
@@ -91,4 +92,10 @@ inline SimpleMath::Vector3 ConvertVec3(const glm::vec3& v)
 inline glm::vec3 ConvertVec3(const SimpleMath::Vector3& v)
 {
     return glm::vec3{ v.x, v.y, v.z };
+}
+
+inline bool IsVector3Zero(const SimpleMath::Vector3& v)
+{
+    SimpleMath::Vector3 compV{ std::fabs(v.x), std::fabsf(v.y), std::fabs(v.z) };
+    return DirectX::XMVector3LessOrEqual(v, EPSOLON_VEC3);
 }

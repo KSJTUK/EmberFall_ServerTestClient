@@ -166,6 +166,7 @@
     </ClCompile>
     <ClCompile Include="PhysicsComponent.cpp" />
     <ClCompile Include="stbi_image.cpp" />
+    <ClCompile Include="TestComponent.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="Transform.cpp" />
@@ -189,6 +190,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="PhysicsComponent.h" />
     <ClInclude Include="stb_image.h" />
+    <ClInclude Include="TestComponent.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="GameTimer.h" />
     <ClInclude Include="Transform.h" />

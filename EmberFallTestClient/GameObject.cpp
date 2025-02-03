@@ -37,6 +37,10 @@ void GameObject::SetComponent(std::shared_ptr<Component> component) {
     mComponents.push_back(component);
 }
 
+void GameObject::SetPosition(const SimpleMath::Vector3& pos) {
+    mTransform.SetPosition(pos);
+}
+
 void GameObject::ResetCamera(std::shared_ptr<class Camera> camera) {
     mCamera = camera;
 }
@@ -62,7 +66,7 @@ void GameObject::Update(const float deltaTime) {
 
     mTransform.Update();
     if (nullptr != mCamera) {
-        mCamera->Update(deltaTime, ConvertVec3(mTransform.GetPosition()), ConvertVec3(mTransform.GetLook()));
+        mCamera->Update(deltaTime, mTransform.GetPosition(), mTransform.GetLook());
     }
 }
 
@@ -71,6 +75,10 @@ std::shared_ptr<GameObject> GameObject::Clone() const {
     clone->mModel = mModel;
     clone->mOwnShader = mOwnShader;
     clone->mSpeed = mSpeed;
+    for (auto& component : mComponents) {
+        clone->SetComponent(component);
+    }
+
     mOwnShader->RegisterRenderingObject(clone);
 
     return clone;
