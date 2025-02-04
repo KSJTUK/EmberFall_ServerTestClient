@@ -79,7 +79,8 @@ void GameObject::Update(const float deltaTime) {
 
     mTransform.Update();
     if (nullptr != mCamera) {
-        mCamera->Update(deltaTime, mTransform.GetPosition(), mTransform.GetLook());
+        //mCamera->Update(deltaTime, mTransform.GetPosition(), mTransform.GetLook());
+        mCamera->Update(deltaTime, mTransform.GetPosition()); // temp
     }
 }
 
