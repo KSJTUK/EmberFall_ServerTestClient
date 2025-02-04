@@ -41,6 +41,14 @@ void GameObject::SetPosition(const SimpleMath::Vector3& pos) {
     mTransform.SetPosition(pos);
 }
 
+void GameObject::SetRotation(const SimpleMath::Quaternion& rot) {
+    mTransform.SetRotation(rot);
+}
+
+void GameObject::Scale(const SimpleMath::Vector3& scale) {
+    mTransform.Scale(scale);
+}
+
 void GameObject::SetColor(const SimpleMath::Vector3& color) {
     mColor = color;
 }
@@ -79,8 +87,7 @@ void GameObject::Update(const float deltaTime) {
 
     mTransform.Update();
     if (nullptr != mCamera) {
-        //mCamera->Update(deltaTime, mTransform.GetPosition(), mTransform.GetLook());
-        mCamera->Update(deltaTime, mTransform.GetPosition()); // temp
+        mCamera->Update(deltaTime, mTransform.GetPosition(), mTransform.GetLook()); // temp
     }
 }
 
@@ -91,9 +98,9 @@ std::shared_ptr<GameObject> GameObject::Clone() const {
     clone->mSpeed = mSpeed;
     clone->mColor = mColor;
     clone->mLightObj = mLightObj;
-    for (auto& component : mComponents) {
-        clone->SetComponent(component);
-    }
+    //for (auto& component : mComponents) {
+    //    clone->SetComponent(component);
+    //}
 
     mOwnShader->RegisterRenderingObject(clone);
 

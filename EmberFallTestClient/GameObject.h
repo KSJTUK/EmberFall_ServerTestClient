@@ -17,6 +17,8 @@ public:
 
     void SetComponent(std::shared_ptr<Component> component);
     void SetPosition(const SimpleMath::Vector3& pos);
+    void SetRotation(const SimpleMath::Quaternion& rot);
+    void Scale(const SimpleMath::Vector3& scale);
     void SetColor(const SimpleMath::Vector3& color);
 
     template <typename T> requires std::derived_from<T, Component>
@@ -38,7 +40,7 @@ public:
     void Render();
 
 private:
-    SessionIdType mId{ INVALID_CLIENT_ID };
+    SessionIdType mId{ INVALID_SESSION_ID };
     bool mTextured{ false };
     bool mLightObj{ false };
     SimpleMath::Vector3 mColor{ 1.0f, 1.0f, 1.0f };

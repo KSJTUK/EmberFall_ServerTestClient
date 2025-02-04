@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "Model.h"
 #include "GraphicsBuffer.h"
 #include "Texture.h"
@@ -55,7 +55,7 @@ void Model::MakeBoundingBox() {
 
 void Model::ReadFace(std::stringstream& contents, std::vector<unsigned int>* indiciesVec) {
 	std::string delTag{ };
-	std::string face[3]{ };        // f a/b/c -> a == Á¤Á¡ ÀÎµ¦½º, b == ÅØ½ºÃ³ ÀÎµ¦½º, c == ³ë¸Ö ÀÎµ¦½º
+	std::string face[3]{ };        // f a/b/c -> a == ì •ì  ì¸ë±ìŠ¤, b == í…ìŠ¤ì²˜ ì¸ë±ìŠ¤, c == ë…¸ë©€ ì¸ë±ìŠ¤
 	contents >> delTag >> face[0] >> face[1] >> face[2];
 
 	for (int i = 0; i < 3; ++i) {
@@ -84,21 +84,21 @@ void Model::ReadFace(std::stringstream& contents, std::vector<unsigned int>* ind
 
 void Model::ReadVertex(std::stringstream& contents, std::vector<glm::vec3>& positions) {
 	std::string delTag{ };
-	glm::vec3 tempVec{ };      // Á¤Á¡ ÁÂÇ¥ ÀúÀå
+	glm::vec3 tempVec{ };      // ì •ì  ì¢Œí‘œ ì €ì¥
 	contents >> delTag >> tempVec.x >> tempVec.y >> tempVec.z;
 	positions.push_back(tempVec);
 }
 
 void Model::ReadVertexTexture(std::stringstream& contents, std::vector<glm::vec2>& textureCoords) {
 	std::string delTag{ };
-	glm::vec2 tempVec{ };      // Á¤Á¡ ÁÂÇ¥ ÀúÀå
+	glm::vec2 tempVec{ };      // ì •ì  ì¢Œí‘œ ì €ì¥
 	contents >> delTag >> tempVec.x >> tempVec.y;
 	textureCoords.push_back(tempVec);
 }
 
 void Model::ReadVertexNormal(std::stringstream& contents, std::vector<glm::vec3>& normals) {
 	std::string delTag{ };
-	glm::vec3 tempVec{ };      // Á¤Á¡ ÁÂÇ¥ ÀúÀå
+	glm::vec3 tempVec{ };      // ì •ì  ì¢Œí‘œ ì €ì¥
 	contents >> delTag >> tempVec.x >> tempVec.y >> tempVec.z;
 	normals.push_back(tempVec);
 }
@@ -120,26 +120,26 @@ void Model::ReadObject(const char* filePath) {
 	while (!objFile.eof()) {
 		std::getline(objFile, line);
 		std::stringstream sstream{ line };
-		std::string delTag{ };     // ¾Õ¿¡ ÀÖ´Â v, vn, f¿Í °°Àº ÅÂ±× Á¦°Å¿ë
+		std::string delTag{ };     // ì•ì— ìˆëŠ” v, vn, fì™€ ê°™ì€ íƒœê·¸ ì œê±°ìš©
 
-		if (line[0] == 'v') {              // ¸Ç ¾Õ ¹®ÀÚ°¡ vÀÌ¸é Á¤Á¡¿¡ ´ëÇÑ Á¤º¸ÀÌ´Ù
-			if (line[1] == 'n') {          // vn == Á¤Á¡ ³ë¸Ö
+		if (line[0] == 'v') {              // ë§¨ ì• ë¬¸ìê°€ vì´ë©´ ì •ì ì— ëŒ€í•œ ì •ë³´ì´ë‹¤
+			if (line[1] == 'n') {          // vn == ì •ì  ë…¸ë©€
 				ReadVertex(sstream, vertexNormals);
 			}
-			else if (line[1] == 't') {		// vt == ÅØ½ºÃÄ ÁÂÇ¥
+			else if (line[1] == 't') {		// vt == í…ìŠ¤ì³ ì¢Œí‘œ
 				ReadVertexTexture(sstream, vertexTextureCoord);
 			}
-			else if (line[1] == ' ') {     // v == Á¤Á¡ ÁÂÇ¥
+			else if (line[1] == ' ') {     // v == ì •ì  ì¢Œí‘œ
 				ReadVertexNormal(sstream, vertexPositions);
 			}
 		}
-		else if (line[0] == 'f') {         // ¸Ç ¾Õ ¹®ÀÚ°¡ fÀÌ¸é face(¸é)¿¡ ´ëÇÑ Á¤º¸ÀÌ´Ù
+		else if (line[0] == 'f') {         // ë§¨ ì• ë¬¸ìê°€ fì´ë©´ face(ë©´)ì— ëŒ€í•œ ì •ë³´ì´ë‹¤
 			ReadFace(sstream, indiciesVec);
 		}
 	}
 
-	// Á¤Á¡ ³ë¸Ö°ú ÅØ½ºÃÄÀÇ °¹¼ö°¡ °¢°¢ ´Ù ´Ù¸£±â ¶§¹®¿¡ ´õÀÌ»ó DrawElements¸¦ »ç¿ëÇÏ±â´Â ¾î·Á¿ò
-	// µû¶ó¼­ Á¤Á¡µéÀ» º¹Á¦ÇÔ
+	// ì •ì  ë…¸ë©€ê³¼ í…ìŠ¤ì³ì˜ ê°¯ìˆ˜ê°€ ê°ê° ë‹¤ ë‹¤ë¥´ê¸° ë•Œë¬¸ì— ë”ì´ìƒ DrawElementsë¥¼ ì‚¬ìš©í•˜ê¸°ëŠ” ì–´ë ¤ì›€
+	// ë”°ë¼ì„œ ì •ì ë“¤ì„ ë³µì œí•¨
 	mVerticies.resize(indiciesVec[0].size());
 	auto endLoop{ mVerticies.size() };
 
@@ -151,7 +151,7 @@ void Model::ReadObject(const char* filePath) {
 
 	std::cout << mVerticies.size() << std::endl;
 
-	// ´Ü Á¤Á¡ ÃÖ¼Ò ÃÖ´ñ°ªÀÇ °è»êÀ» ºü¸£°Ô ÇÏ±âÀ§ÇØ Áßº¹µÇÁö ¾ÊÀº Á¤Á¡ ¹è¿­À» °è»ê¿¡ »ç¿ë
+	// ë‹¨ ì •ì  ìµœì†Œ ìµœëŒ“ê°’ì˜ ê³„ì‚°ì„ ë¹ ë¥´ê²Œ í•˜ê¸°ìœ„í•´ ì¤‘ë³µë˜ì§€ ì•Šì€ ì •ì  ë°°ì—´ì„ ê³„ì‚°ì— ì‚¬ìš©
 	mNoDuplicatedVertex = vertexPositions;
 
 	CalcMinMaxVertexElem();

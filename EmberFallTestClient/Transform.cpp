@@ -101,7 +101,7 @@ void Transform::Scale(const SimpleMath::Vector3& v) {
 }
 
 void Transform::Update() {
-    //mWorld = SimpleMath::Matrix::CreateScale(mScale)
-    //    * SimpleMath::Matrix::CreateFromQuaternion(mRotation)
-    //    * SimpleMath::Matrix::CreateTranslation(mPosition);
+    mWorld = SimpleMath::Matrix::CreateScale(mScale)
+        * SimpleMath::Matrix::CreateFromQuaternion(mRotation)
+        * SimpleMath::Matrix::CreateTranslation(mPosition);
 }

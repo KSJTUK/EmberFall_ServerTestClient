@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "GraphicsBuffer.h"
 
 GraphicsBuffer::GraphicsBuffer() { }
@@ -9,8 +9,8 @@ GraphicsBuffer::~GraphicsBuffer() {
 }
 
 void GraphicsBuffer::Init() {
-	// VAO °´Ã¼ »ı¼º ¹× ¹ÙÀÎµå
-	// VBO °´Ã¼ »ı¼º ¹× ¹ÙÀÎµå
+	// VAO ê°ì²´ ìƒì„± ë° ë°”ì¸ë“œ
+	// VBO ê°ì²´ ìƒì„± ë° ë°”ì¸ë“œ
 	glGenVertexArrays(1, &mVertexArray);
 	glGenBuffers(1, &mVertexBuffer);
 
@@ -31,15 +31,15 @@ void GraphicsBuffer::ResetVerticies(const std::vector<Vertex>& verticies) {
 
 	glBufferData(GL_ARRAY_BUFFER, mVertexDataSize * sizeof(Vertex), &verticies[0], GL_STATIC_DRAW);
 
-	// location 0¹ø¿¡ Vertex°´Ã¼ÀÇ positionÁ¤º¸¸¦ ³Ñ°ÜÁÜ
+	// location 0ë²ˆì— Vertexê°ì²´ì˜ positionì •ë³´ë¥¼ ë„˜ê²¨ì¤Œ
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
 	glEnableVertexAttribArray(0);
 
-	// location 1¹ø¿¡ Vertex°´Ã¼ÀÇ textureÁ¤º¸¸¦ ³Ñ°ÜÁÜ
+	// location 1ë²ˆì— Vertexê°ì²´ì˜ textureì •ë³´ë¥¼ ë„˜ê²¨ì¤Œ
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, uv));
 	glEnableVertexAttribArray(1);
 
-	// location 2¹ø¿¡ Vertex°´Ã¼ÀÇ normalÁ¤º¸¸¦ ³Ñ°ÜÁÜ
+	// location 2ë²ˆì— Vertexê°ì²´ì˜ normalì •ë³´ë¥¼ ë„˜ê²¨ì¤Œ
 	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
 	glEnableVertexAttribArray(2);
 }
@@ -47,19 +47,19 @@ void GraphicsBuffer::ResetVerticies(const std::vector<Vertex>& verticies) {
 void GraphicsBuffer::SetVerticies(const std::vector<Vertex>& verticies) {
 	mVertexDataSize = verticies.size();
 
-	// Vertex°´Ã¼ÀÇ Á¤º¸¸¦ VBO¿¡ ³Ñ°ÜÁÜ
+	// Vertexê°ì²´ì˜ ì •ë³´ë¥¼ VBOì— ë„˜ê²¨ì¤Œ
 	glBindVertexArray(mVertexArray);
 	glBufferData(GL_ARRAY_BUFFER, mVertexDataSize * sizeof(Vertex), &verticies[0], GL_STATIC_DRAW);
 
-	// location 0¹ø¿¡ Vertex°´Ã¼ÀÇ positionÁ¤º¸¸¦ ³Ñ°ÜÁÜ
+	// location 0ë²ˆì— Vertexê°ì²´ì˜ positionì •ë³´ë¥¼ ë„˜ê²¨ì¤Œ
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
 	glEnableVertexAttribArray(0);
 
-	// location 1¹ø¿¡ Vertex°´Ã¼ÀÇ textureÁ¤º¸¸¦ ³Ñ°ÜÁÜ
+	// location 1ë²ˆì— Vertexê°ì²´ì˜ textureì •ë³´ë¥¼ ë„˜ê²¨ì¤Œ
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, uv));
 	glEnableVertexAttribArray(1);
 
-	// location 2¹ø¿¡ Vertex°´Ã¼ÀÇ normalÁ¤º¸¸¦ ³Ñ°ÜÁÜ
+	// location 2ë²ˆì— Vertexê°ì²´ì˜ normalì •ë³´ë¥¼ ë„˜ê²¨ì¤Œ
 	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
 	glEnableVertexAttribArray(2);
 	glBindVertexArray(0);
@@ -79,9 +79,9 @@ void GraphicsBuffer::SetDrawMode(unsigned int mode) {
 }
 
 void GraphicsBuffer::Render() {
-	// shaderProgram ¿¡¼­ UseProgramÀ» È°¼ºÈ­ Çß´Ù´Â °¡Á¤ÇÏ¿¡ ¼öÇà
+	// shaderProgram ì—ì„œ UseProgramì„ í™œì„±í™” í–ˆë‹¤ëŠ” ê°€ì •í•˜ì— ìˆ˜í–‰
 	glBindVertexArray(mVertexArray);
 	glDrawArrays(mDrawMode, 0, UINT32(mVertexDataSize));
-	glBindVertexArray(0); // Array ¹ÙÀÎµå ÇØÁ¦
+	glBindVertexArray(0); // Array ë°”ì¸ë“œ í•´ì œ
 	glBindTexture(GL_TEXTURE_2D, 0);
 }

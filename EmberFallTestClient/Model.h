@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 class Model {
 public:
@@ -36,18 +36,18 @@ public:
 	void Render();
 
 private:
-	// VAO, VBO, EBO¸¦ °¡Áö´Â °´Ã¼
+	// VAO, VBO, EBOë¥¼ ê°€ì§€ëŠ” ê°ì²´
 	std::unique_ptr<class GraphicsBuffer> mGraphicsBuffer{ };
 	std::unique_ptr<class Texture> mTexture{ };
 
-	// Á¤Á¡ ¼Ó¼ºµéÀ» ÀúÀåÇÒ vector
+	// ì •ì  ì†ì„±ë“¤ì„ ì €ì¥í•  vector
 	std::vector<Vertex> mVerticies{ };
 
-	// Á¤Á¡ ³ë¸ÖµéÀ» ÀúÀåÇÒ vector
+	// ì •ì  ë…¸ë©€ë“¤ì„ ì €ì¥í•  vector
 	std::vector<glm::vec3> mVertexnormals{ };
 	std::vector<glm::vec3> mNoDuplicatedVertex{ };
 
-	// Á¤Á¡ÁÂÇ¥µé Áß ÃÖ´ë ÃÖ¼ÒÀÎ x, y, z °ªÀ» ÀúÀåÇÒ º¯¼öµé
+	// ì •ì ì¢Œí‘œë“¤ ì¤‘ ìµœëŒ€ ìµœì†Œì¸ x, y, z ê°’ì„ ì €ì¥í•  ë³€ìˆ˜ë“¤
 	glm::vec3 mMaxCoord{ };
 	glm::vec3 mMinCoord{ };
 
