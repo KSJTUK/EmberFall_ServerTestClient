@@ -44,6 +44,8 @@ GameScene::GameScene(std::shared_ptr<Window> mainWindow)
         distFromOrigin = SimpleMath::Vector3{ -100.0f, -100.0f, -100.0f } + distFromOrigin;
         auto newObj = obj->Clone();
         newObj->SetPosition(distFromOrigin);
+
+        distFromOrigin += SimpleMath::Vector3{ 100.0f, 100.0f, 100.0f };
         distFromOrigin.Normalize();
         obj->SetColor(distFromOrigin);
         mObjects.push_back(newObj);
@@ -121,15 +123,20 @@ void GameScene::Update() {
 
 void GameScene::SendUpdateResult(const std::shared_ptr<ClientCore>& core) {
 #ifndef STAND_ALONE
+    auto myId = core->GetSessionId();
+
     // Networking - Send Input Results
     PacketInput inputPacket{ sizeof(PacketInput), PacketType::PT_INPUT_CS, core->GetSessionId() };
     auto& keyList = Input::GetStateChangedKeys();
     for (auto key : keyList) {
         inputPacket.key = key;
-        core->Send(&inputPacket, inputPacket.size);
+        core->Send(&inputPacket);
     }
 
-    //PacketGameObjCS
+    PacketGameObjCS game{ sizeof(PacketGameObjCS), PacketType::PT_GAMEOBJ_CS, core->GetSessionId() };
+    game.look = mPlayers[myId]->GetTransform().GetLook();
+    game.rotation = mPlayers[myId]->GetTransform().GetRotation();
+    core->Send(&game);
 #endif
 }
 

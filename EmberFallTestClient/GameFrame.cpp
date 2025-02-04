@@ -30,6 +30,7 @@ GameFrame::~GameFrame() {
 void GameFrame::ResizeWindow() { }
 
 void GameFrame::AdvanceFrame() {
+    std::this_thread::sleep_for(16ms);
 	Input::Clear();
     Input::Update();		
 
