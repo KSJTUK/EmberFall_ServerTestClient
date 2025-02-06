@@ -1,4 +1,4 @@
-#include "pch.h"
+Ôªø#include "pch.h"
 #include "GameFrame.h"
 #include "Input.h"
 #include "Window.h"
@@ -8,7 +8,7 @@ GameFrame::GameFrame()
     : mMainWindow{ std::make_shared<Window>() }, mScene{ std::make_unique<GameScene>(mMainWindow) } {
     Input::SetMainWindow(mMainWindow);
 
-    // ±Ì¿Ã ≈◊Ω∫∆Æ º≥¡§
+    // ÍπäÏù¥ ÌÖåÏä§Ìä∏ ÏÑ§Ï†ï
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
 
@@ -30,7 +30,7 @@ GameFrame::~GameFrame() {
 void GameFrame::ResizeWindow() { }
 
 void GameFrame::AdvanceFrame() {
-    std::this_thread::sleep_for(16ms);
+    std::this_thread::sleep_for(10ms);
 	Input::Clear();
     Input::Update();		
 

@@ -26,14 +26,14 @@ GameScene::GameScene(std::shared_ptr<Window> mainWindow)
     globalLight->SetLinearQuadrant(0.0f, 0.0f);
     mainShader->RegisterLights({ pointLight, globalLight });
 
-    auto player = std::make_shared<GameObject>(std::make_shared<Model>("object/cube.obj", "textures/container.jpg"), glm::vec3{ 0.0f, 0.0f, 0.0f });
+    auto player = std::make_shared<GameObject>(std::make_shared<Model>("object/cube.obj"), glm::vec3{ 0.0f, 0.0f, 0.0f });
 
     auto cube = std::make_shared<Model>("object/cube.obj");
     pointLight->SetModel(cube);
         
     mPlayers.emplace(player->GetId(), player); // dummy
 
-    auto obj = std::make_shared<GameObject>(std::make_shared<Model>("object/cube.obj"), glm::vec3{ 0.0f, 0.0f, 0.0f });
+    auto obj = std::make_shared<GameObject>(std::make_shared<Model>("object/cube.obj", "textures/container.jpg"), glm::vec3{ 0.0f, 0.0f, 0.0f });
     obj->CreateComponent<TestComponent>();
     mObjects.emplace_back(obj);
     mainShader->RegisterRenderingObject({ obj });
@@ -45,9 +45,9 @@ GameScene::GameScene(std::shared_ptr<Window> mainWindow)
         auto newObj = obj->Clone();
         newObj->SetPosition(distFromOrigin);
 
-        distFromOrigin += SimpleMath::Vector3{ 100.0f, 100.0f, 100.0f };
-        distFromOrigin.Normalize();
-        obj->SetColor(distFromOrigin);
+        //distFromOrigin += SimpleMath::Vector3{ 100.0f, 100.0f, 100.0f };
+        //distFromOrigin.Normalize();
+        //obj->SetColor(distFromOrigin);
         mObjects.push_back(newObj);
     }
 
@@ -70,7 +70,7 @@ void GameScene::ProcessPackets(const std::shared_ptr<ClientCore>& core) {
         switch (header.type) {
         case PacketType::PT_NOTIFYING_ID_SC:
             {
-                PacketNotifyId id;
+                PacketNotifyId id; 
                 buffer.Read(id);
             }
             std::cout << std::format("INIT SESSION ID : {}\n", header.id);
@@ -80,6 +80,7 @@ void GameScene::ProcessPackets(const std::shared_ptr<ClientCore>& core) {
             mPlayers[myId] = mPlayers[255];
             mPlayers[myId]->ResetCamera(mCamera);
             mPlayers[myId]->CreateComponent<InputComponent>();
+            mPlayers[myId]->SetColor(SimpleMath::Vector3{ RAND_COLOR, RAND_COLOR, RAND_COLOR });
             mShaders["mainShader"]->RegisterRenderingObject(mPlayers[myId]);
             break;
 
@@ -94,8 +95,11 @@ void GameScene::ProcessPackets(const std::shared_ptr<ClientCore>& core) {
                 }
 
                 mPlayers[header.id]->SetPosition(objPacket.position);
-                mPlayers[header.id]->SetRotation(objPacket.rotation);
+                if (myId != header.id) {
+                    mPlayers[header.id]->SetRotation(objPacket.rotation);
+                }
                 mPlayers[header.id]->Scale(objPacket.scale);
+                mPlayers[header.id]->SetColor(objPacket.color);
             }
             break;
 
@@ -125,7 +129,6 @@ void GameScene::SendUpdateResult(const std::shared_ptr<ClientCore>& core) {
 #ifndef STAND_ALONE
     auto myId = core->GetSessionId();
 
-    // Networking - Send Input Results
     PacketInput inputPacket{ sizeof(PacketInput), PacketType::PT_INPUT_CS, core->GetSessionId() };
     auto& keyList = Input::GetStateChangedKeys();
     for (auto key : keyList) {
@@ -134,7 +137,6 @@ void GameScene::SendUpdateResult(const std::shared_ptr<ClientCore>& core) {
     }
 
     PacketGameObjCS game{ sizeof(PacketGameObjCS), PacketType::PT_GAMEOBJ_CS, core->GetSessionId() };
-    game.look = mPlayers[myId]->GetTransform().GetLook();
     game.rotation = mPlayers[myId]->GetTransform().GetRotation();
     core->Send(&game);
 #endif

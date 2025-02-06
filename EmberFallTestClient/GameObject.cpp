@@ -33,6 +33,10 @@ float GameObject::GetSpeed() const {
     return mSpeed;
 }
 
+SimpleMath::Vector3 GameObject::GetColor() const {
+    return mColor;
+}
+
 void GameObject::SetComponent(std::shared_ptr<Component> component) {
     mComponents.push_back(component);
 }

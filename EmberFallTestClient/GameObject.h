@@ -14,6 +14,7 @@ public:
     SessionIdType GetId() const;
     Transform& GetTransform();
     float GetSpeed() const;
+    SimpleMath::Vector3 GetColor() const;
 
     void SetComponent(std::shared_ptr<Component> component);
     void SetPosition(const SimpleMath::Vector3& pos);

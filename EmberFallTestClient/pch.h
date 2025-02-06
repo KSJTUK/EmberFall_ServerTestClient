@@ -23,6 +23,8 @@
 
 //#define STAND_ALONE
 
+#define RAND_COLOR static_cast<float>(rand()) / static_cast<float>(RAND_MAX)
+
 struct Meterials {
     glm::vec3 specular{ };
     float shininess{ };

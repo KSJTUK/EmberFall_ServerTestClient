@@ -22,3 +22,10 @@ enum class IOType : UINT32 {
     DISCONNECT,
     ACCEPT
 };
+
+enum class CollisionState : BYTE {
+    NONE,
+    ENTER,
+    STAY,
+    EXIT
+};
