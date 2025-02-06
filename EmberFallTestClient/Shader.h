@@ -30,6 +30,9 @@ public:
     void RegisterLights(std::initializer_list<std::shared_ptr<class Light>> lights);
     void Render();
 
+    void UseProgram();
+    void UnuseProgram();
+
 private:
     void CreateShaders(const std::vector<std::string>& files);
     UINT32 CreateShader(const std::string& shaderPath, UINT32 shaderType);

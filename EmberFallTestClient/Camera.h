@@ -13,10 +13,17 @@ public:
 
 public:
 	virtual void Render(const std::shared_ptr<class Shader>& curShader);
-	virtual void Update(float deltaTime, const SimpleMath::Vector3& position=SimpleMath::Vector3::Zero, const SimpleMath::Vector3& look=SimpleMath::Vector3::Zero);
+	virtual void Update(float deltaTime,
+		const SimpleMath::Vector3& position = SimpleMath::Vector3::Zero,
+		const SimpleMath::Vector3& look = SimpleMath::Vector3::Zero,
+		const SimpleMath::Vector3& offset = SimpleMath::Vector3::Zero
+	);
 
 	SimpleMath::Vector3 GetViewPoint() const { return mAt; }
 	SimpleMath::Vector3 GetPosition() { return mEye; }
+
+	glm::mat4 GetViewMat() const;
+	glm::mat4 GetProjMat() const;
 
 public:
 	void UpdateBasisAxis();

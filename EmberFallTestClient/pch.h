@@ -98,6 +98,7 @@ inline glm::vec3 ConvertVec3(const SimpleMath::Vector3& v)
 
 inline bool IsVector3Zero(const SimpleMath::Vector3& v)
 {
-    SimpleMath::Vector3 compV{ std::fabs(v.x), std::fabsf(v.y), std::fabs(v.z) };
+    SimpleMath::Vector3 compV{ 
+        std::fabs(v.x), std::fabsf(v.y), std::fabs(v.z) };
     return DirectX::XMVector3LessOrEqual(v, EPSOLON_VEC3);
 }

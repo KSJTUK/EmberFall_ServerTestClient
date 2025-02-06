@@ -31,20 +31,28 @@ void Camera::Render(const std::shared_ptr<class Shader>& curShader) {
 	curShader->SetUniformMat4("viewProj", GL_FALSE, mProjection * mView);
 }
 
-void Camera::Update(float deltaTime, const SimpleMath::Vector3& position, const SimpleMath::Vector3& look) {
+void Camera::Update(float deltaTime, const SimpleMath::Vector3& position, const SimpleMath::Vector3& look, const SimpleMath::Vector3& offset) {
 	int width, height;
 	glfwGetFramebufferSize(mWindow->GetWindow(), &width, &height);
 	mAspect = static_cast<float>(width) / static_cast<float>(height);
 
-    mEye = position;
+    mEye = position + offset;
 
 	if (false == IsVector3Zero(look)) {
-		mAt = look;
+        mAt = look;
 		mAt.Normalize();
-		UpdateBasisAxis();
+	//	UpdateBasisAxis();
 	}
 
-	mView = ConvertDXMatToGLMat(DirectX::XMMatrixLookAtRH(mEye, mEye + mAt, mUp));
+	mView = ConvertDXMatToGLMat(DirectX::XMMatrixLookAtRH(mEye, mEye + mAt, SimpleMath::Vector3::Up));
+}
+
+glm::mat4 Camera::GetViewMat() const {
+	return mView;
+}
+
+glm::mat4 Camera::GetProjMat() const {
+	return mProjection;
 }
 
 void Camera::UpdateBasisAxis() {

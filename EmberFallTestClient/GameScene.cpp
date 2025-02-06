@@ -8,13 +8,17 @@
 #include "Model.h"
 #include "GameObject.h"
 #include "GameTimer.h"
+#include "Terrain.h"
 
 #include "InputComponent.h"
 #include "TestComponent.h"
 
 GameScene::GameScene(std::shared_ptr<Window> mainWindow)
     : mMainWindow{ mainWindow }, mMainTimer{ std::make_unique<GameTimer>() },
-    mCamera{ std::make_shared<Camera>(mMainWindow, SimpleMath::Vector3{ 0.0f, 0.0f, -5.0f }, SimpleMath::Vector3{ 0.0f, 0.0f, -1.0f }) } {
+    mCamera{ std::make_shared<Camera>(mMainWindow, SimpleMath::Vector3{ 0.0f, 1.0f, 0.0f }, SimpleMath::Vector3{ 0.0f, 0.0f, -1.0f }) } {
+
+    mTerrain = std::make_unique<Terrain>(glm::vec2{ 257.0f, 257.0f });
+
     auto mainShader = std::make_shared<Shader>(static_shader);
 
     auto pointLight = std::make_shared<PointLight>();
@@ -33,7 +37,7 @@ GameScene::GameScene(std::shared_ptr<Window> mainWindow)
         
     mPlayers.emplace(player->GetId(), player); // dummy
 
-    auto obj = std::make_shared<GameObject>(std::make_shared<Model>("object/cube.obj", "textures/container.jpg"), glm::vec3{ 0.0f, 0.0f, 0.0f });
+    auto obj = std::make_shared<GameObject>(std::make_shared<Model>("object/cube.obj", "textures/container.jpg"), glm::vec3{0.0f, 0.0f, 0.0f});
     obj->CreateComponent<TestComponent>();
     mObjects.emplace_back(obj);
     mainShader->RegisterRenderingObject({ obj });
@@ -44,10 +48,7 @@ GameScene::GameScene(std::shared_ptr<Window> mainWindow)
         distFromOrigin = SimpleMath::Vector3{ -100.0f, -100.0f, -100.0f } + distFromOrigin;
         auto newObj = obj->Clone();
         newObj->SetPosition(distFromOrigin);
-
-        //distFromOrigin += SimpleMath::Vector3{ 100.0f, 100.0f, 100.0f };
-        //distFromOrigin.Normalize();
-        //obj->SetColor(distFromOrigin);
+        obj->SetColor(SimpleMath::Vector3::Zero);
         mObjects.push_back(newObj);
     }
 
@@ -85,7 +86,6 @@ void GameScene::ProcessPackets(const std::shared_ptr<ClientCore>& core) {
             break;
 
         case PacketType::PT_GAMEOBJ_SC:
-            //std::cout << std::format("OBJECT Info: {}\n", header.id);
             {
                 PacketGameObj objPacket{ };
                 buffer.Read(objPacket); 
@@ -152,6 +152,8 @@ void GameScene::Render() {
     for (auto& [tag, shader] : mShaders) {
         shader->Render();
     }
+
+    mTerrain->Render(mCamera);
 
     glfwSwapBuffers(mMainWindow->GetWindow());
 }

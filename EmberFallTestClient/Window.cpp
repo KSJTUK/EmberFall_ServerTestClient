@@ -13,8 +13,8 @@ Window::Window() {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	// 윈도우 정보 초기 설정
-	INT32 width = 1080;
-	INT32 height = 720;
+	INT32 width = 800;
+	INT32 height = 600;
 	INT32 x = 0;
 	INT32 y = 0;
 	std::string windowTitle = "EmberFallTestClient";

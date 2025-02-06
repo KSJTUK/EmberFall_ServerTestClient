@@ -14,6 +14,7 @@ public:
 private:
     std::shared_ptr<class Window> mMainWindow{ };
 
+    std::unique_ptr<class Terrain> mTerrain{ };
     std::shared_ptr<class Camera> mCamera{ };
     std::unordered_map<std::string, std::shared_ptr<class Shader>> mShaders{ };
     std::unordered_map<SessionIdType, std::shared_ptr<class GameObject>> mPlayers{ };

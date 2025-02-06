@@ -8,7 +8,8 @@ InputComponent::InputComponent() { }
 InputComponent::~InputComponent() { }
 
 void InputComponent::Update(const float deltaTime, GameObject& obj) {
-    static SimpleMath::Vector2 rotAngle{ };
+    static float yaw{ 0.0f };
+    static float pitch{ 0.0f };
 
     auto& transform = obj.GetTransform();
 
@@ -19,11 +20,18 @@ void InputComponent::Update(const float deltaTime, GameObject& obj) {
         deltaRotate.x = glm::radians(-deltaMouse.x * MOUSE_SENSITIVE);
         deltaRotate.y = glm::radians(-deltaMouse.y * MOUSE_SENSITIVE);
 
-        rotAngle += deltaRotate;
-        rotAngle.y = std::clamp(rotAngle.y, -DirectX::XM_PIDIV2 + 0.1f, DirectX::XM_PIDIV2 - 0.1f);
+        yaw += deltaRotate.x;
+        pitch += deltaRotate.y;
+        pitch = std::clamp(pitch,
+            -DirectX::XM_PIDIV2 + 1.0f,
+            DirectX::XM_PIDIV2 - 1.0f);
 
-        cameraRotate = SimpleMath::Quaternion::CreateFromAxisAngle(SimpleMath::Vector3::Up, rotAngle.x);
-        cameraRotate = SimpleMath::Quaternion::CreateFromAxisAngle(SimpleMath::Vector3::Right, rotAngle.y) * cameraRotate;
+        cameraRotate = SimpleMath::Quaternion::CreateFromYawPitchRoll(yaw, pitch, 0.0f);
+        //cameraRotate = SimpleMath::Quaternion::CreateFromAxisAngle(
+        //    SimpleMath::Vector3::Up, rotAngle.x);
+        //cameraRotate = SimpleMath::Quaternion::CreateFromAxisAngle(
+        //    SimpleMath::Vector3::Right, rotAngle.y) * cameraRotate;
+
         cameraRotate.Normalize();
         transform.SetRotation(cameraRotate);
     }

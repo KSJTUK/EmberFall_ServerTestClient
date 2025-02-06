@@ -21,45 +21,27 @@
     <Filter Include="game">
       <UniqueIdentifier>{044d9b67-07af-41d5-ad03-e2ba1f0f8593}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Component">
+      <UniqueIdentifier>{4af95c42-a8e8-42b9-9dc1-247e41ab453c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="External">
+      <UniqueIdentifier>{03be97c3-584a-4120-ad6f-ae19d355c692}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Frame">
+      <UniqueIdentifier>{62de86e3-ecf5-4d6a-b2d1-b8f2d2501b53}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="Component.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="pch.cpp">
       <Filter>pch</Filter>
-    </ClCompile>
-    <ClCompile Include="InputComponent.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="Input.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="PhysicsComponent.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="Window.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="Shader.cpp">
-      <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="GraphicsBuffer.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Model.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="Texture.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="stbi_image.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Lighting.cpp">
@@ -71,61 +53,64 @@
     <ClCompile Include="GameScene.cpp">
       <Filter>game</Filter>
     </ClCompile>
-    <ClCompile Include="GameTimer.cpp">
-      <Filter>game</Filter>
-    </ClCompile>
     <ClCompile Include="GameFrame.cpp">
       <Filter>game</Filter>
     </ClCompile>
-    <ClCompile Include="Transform.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="TestComponent.cpp">
-      <Filter>source</Filter>
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="InputComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="stbi_image.cpp">
+      <Filter>External</Filter>
     </ClCompile>
     <ClCompile Include="..\External\Include\DirectXTK12\SimpleMath.cpp">
-      <Filter>source</Filter>
+      <Filter>External</Filter>
+    </ClCompile>
+    <ClCompile Include="Window.cpp">
+      <Filter>Frame</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Frame</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>Frame</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Frame</Filter>
+    </ClCompile>
+    <ClCompile Include="GameTimer.cpp">
+      <Filter>Frame</Filter>
+    </ClCompile>
+    <ClCompile Include="Terrain.cpp">
+      <Filter>game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
       <Filter>pch</Filter>
     </ClInclude>
-    <ClInclude Include="InputComponent.h">
-      <Filter>source</Filter>
-    </ClInclude>
-    <ClInclude Include="Input.h">
-      <Filter>source</Filter>
-    </ClInclude>
-    <ClInclude Include="PhysicsComponent.h">
-      <Filter>source</Filter>
-    </ClInclude>
-    <ClInclude Include="Window.h">
-      <Filter>source</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="GraphicsBuffer.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Model.h">
       <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Texture.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="stb_image.h">
-      <Filter>source</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Lighting.h">
       <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Component.h">
-      <Filter>source</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
       <Filter>game</Filter>
@@ -133,17 +118,47 @@
     <ClInclude Include="GameScene.h">
       <Filter>game</Filter>
     </ClInclude>
-    <ClInclude Include="GameTimer.h">
-      <Filter>game</Filter>
-    </ClInclude>
     <ClInclude Include="GameFrame.h">
       <Filter>game</Filter>
     </ClInclude>
-    <ClInclude Include="Transform.h">
-      <Filter>source</Filter>
-    </ClInclude>
     <ClInclude Include="TestComponent.h">
-      <Filter>source</Filter>
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="InputComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="stb_image.h">
+      <Filter>External</Filter>
+    </ClInclude>
+    <ClInclude Include="Window.h">
+      <Filter>Frame</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Frame</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>Frame</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Frame</Filter>
+    </ClInclude>
+    <ClInclude Include="GameTimer.h">
+      <Filter>Frame</Filter>
+    </ClInclude>
+    <ClInclude Include="Terrain.h">
+      <Filter>game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -153,10 +168,10 @@
     <None Include="shader\static_vertex_shader.glsl">
       <Filter>Shader</Filter>
     </None>
-    <None Include="lighting_object_vs.glsl">
+    <None Include="shader\terrain_fragment_shader.glsl">
       <Filter>Shader</Filter>
     </None>
-    <None Include="lighting_object_fs.glsl">
+    <None Include="shader\terrain_vertex_shader.glsl">
       <Filter>Shader</Filter>
     </None>
   </ItemGroup>

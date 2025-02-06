@@ -123,6 +123,28 @@ std::vector<std::vector<float>> Texture::LoadHeightMap(const std::string& height
 	return heights;
 }
 
+void Texture::CreateTextureFromRaw(const BYTE* imageData, size_t width, size_t height) {
+	TextureInfo texInfo{ };
+	texInfo.width = width;
+	texInfo.height = height;
+	texInfo.nrChannel = 1;
+	glGenTextures(1, &texInfo.id);
+	glBindTexture(GL_TEXTURE_2D, texInfo.id);
+
+	// 텍스처 속성 설정
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+	//glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_R8, width, height, 0, GL_RED, GL_UNSIGNED_BYTE, (void*)imageData);
+	//glGenerateMipmap(GL_TEXTURE_2D);
+
+	mTextures.push_back(texInfo);
+}
+
+
 UINT32 Texture::GetTextureID(int textureIndex) {
 	return mTextures[textureIndex].id;
 }

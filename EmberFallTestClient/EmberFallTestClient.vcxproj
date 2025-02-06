@@ -153,11 +153,6 @@
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="InputComponent.cpp" />
     <ClCompile Include="Lighting.cpp" />
-    <None Include="lighting_object_fs.glsl">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-      <FileType>Document</FileType>
-    </None>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="pch.cpp">
@@ -166,6 +161,7 @@
     </ClCompile>
     <ClCompile Include="PhysicsComponent.cpp" />
     <ClCompile Include="stbi_image.cpp" />
+    <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="TestComponent.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="GameTimer.cpp" />
@@ -183,13 +179,11 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="InputComponent.h" />
     <ClInclude Include="Lighting.h" />
-    <None Include="lighting_object_vs.glsl">
-      <FileType>Document</FileType>
-    </None>
     <ClInclude Include="Model.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="PhysicsComponent.h" />
     <ClInclude Include="stb_image.h" />
+    <ClInclude Include="Terrain.h" />
     <ClInclude Include="TestComponent.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="GameTimer.h" />
@@ -200,6 +194,8 @@
   <ItemGroup>
     <None Include="shader\static_fragment_shader.glsl" />
     <None Include="shader\static_vertex_shader.glsl" />
+    <None Include="shader\terrain_fragment_shader.glsl" />
+    <None Include="shader\terrain_vertex_shader.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

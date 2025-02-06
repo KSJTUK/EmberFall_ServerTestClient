@@ -38,7 +38,7 @@ void Shader::RegisterLights(std::initializer_list<std::shared_ptr<class Light>> 
 }
 
 void Shader::Render() {
-	glUseProgram(mId);
+	UseProgram();
 	auto sharedThis = shared_from_this();
 	if (nullptr != mCamera) {
 		mCamera->Render(sharedThis);
@@ -51,6 +51,14 @@ void Shader::Render() {
 	for (auto& obj : mRenderingList) {
 		obj->Render();
 	}
+	UnuseProgram();
+}
+
+void Shader::UseProgram() {
+	glUseProgram(mId);
+}
+
+void Shader::UnuseProgram() {
 	glUseProgram(INVALID_SHADER_ID);
 }
 
