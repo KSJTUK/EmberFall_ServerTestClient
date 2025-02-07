@@ -128,6 +128,15 @@ void Texture::CreateTextureFromRaw(const BYTE* imageData, size_t width, size_t h
 	texInfo.width = width;
 	texInfo.height = height;
 	texInfo.nrChannel = 1;
+
+	//std::vector<BYTE> flippedData{ };
+	//flippedData.resize(width * height);
+	//for (size_t z = 0; z < height; ++z) {
+	//	for (size_t x = 0; x < width; ++x) {
+	//		flippedData[x + (z * width)] = imageData[x + (height - z - 1) * width];  // flip y
+	//	}
+	//}
+
 	glGenTextures(1, &texInfo.id);
 	glBindTexture(GL_TEXTURE_2D, texInfo.id);
 
@@ -138,6 +147,7 @@ void Texture::CreateTextureFromRaw(const BYTE* imageData, size_t width, size_t h
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 	//glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	//glTexImage2D(GL_TEXTURE_2D, 0, GL_R8, width, height, 0, GL_RED, GL_UNSIGNED_BYTE, (void*)flippedData.data());
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_R8, width, height, 0, GL_RED, GL_UNSIGNED_BYTE, (void*)imageData);
 	//glGenerateMipmap(GL_TEXTURE_2D);
 

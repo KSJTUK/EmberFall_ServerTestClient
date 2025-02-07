@@ -63,12 +63,14 @@ public:
 	void Init();
 	void Update(float deltaTime);
 	void Render(const std::shared_ptr<class Camera>& camera);
+	float GetHeight(const float x, const float y, const float offset) const;
 
 private:
 	void CreateTerrainMeshMap();
 
 private:
 	glm::vec2 mTerrainMapSize{ };
+	glm::vec2 mTileSize{ };
 	std::vector<Vertex> m_verticies{ };
 
 	std::unique_ptr<class Texture> mTextureComponent{ };
@@ -81,6 +83,5 @@ private:
 
 	std::shared_ptr<HeightMap> mHeightMap{ };
 		
-	const float mYScale{ 256.f };
-	const float mYShift{ 64.f };
+	const float mYScale{ 0.5f };
 };

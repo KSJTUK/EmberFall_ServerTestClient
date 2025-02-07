@@ -26,6 +26,12 @@ HeightMap::HeightMap(std::string_view imageFilePath, size_t imageWidth, size_t i
 	mPixels.resize(fileSize / sizeof(PixelType));
 	imageFile.read(reinterpret_cast<char*>(mPixels.data()), fileSize);
 
+	for (int z = 0; z < mHeight; ++z) {
+		for (int x = 0; x < mWidth; ++x) {
+			std::swap(mPixels[x + z * mWidth], mPixels[x + (mHeight- z - 1) * mWidth]); // flip
+		}
+	}
+
 	std::cout << std::format("Height Map Load Success [File: {}] [Size: {}]\n", imageFilePath, fileSize);
 	std::cout << std::format("Height Map Info [Width: {}] [Height: {}]\n", mWidth, mHeight);
 }
@@ -76,7 +82,7 @@ float HeightMap::GetPixel(const float u, const float v) const {
 	size_t iu{ static_cast<size_t>(u) };
 	size_t iv{ static_cast<size_t>(v) };
 
-	if ((iu >= mWidth - 1 or iu >= mHeight - 1) or (0.0f > u or 0.0f > v)) {
+	if ((iu >= mWidth - 1 or iv >= mHeight - 1) or (0.0f > u or 0.0f > v)) {
 		return 0.0f;
 	}
 
@@ -133,6 +139,7 @@ Terrain::~Terrain() { }
 
 void Terrain::SetMeterials() {
 	mTerrainShader->SetUniformInt("heightMap", 0);
+	mTerrainShader->SetUniformFloat("yScale", mYScale);
 	mTerrainShader->SetUniformInt("meterials.heightMapTexture", 1);
 	mTerrainShader->SetUniformVec3("meterials.specular", glm::vec3{ 0.f });
 	mTerrainShader->SetUniformFloat("meterials.shininess", 128.f);
@@ -163,6 +170,14 @@ void Terrain::Render(const std::shared_ptr<Camera>& camera) {
 	mTerrainShader->UnuseProgram();
 }
 
+float Terrain::GetHeight(const float x, const float y, const float offset) const {
+	float idxX = (x + mTerrainMapSize.x / 2.0f) / mTileSize.x;
+	float idxZ = (y + mTerrainMapSize.y / 2.0f) / mTileSize.y;
+
+	float pixel = mHeightMap->GetPixel(idxX, idxZ);
+	return pixel * mYScale + offset;
+}
+
 void Terrain::CreateTerrainMeshMap() {
 	auto heightMapInfo = mTextureComponent->GetTextureInfo(HEIGHT_MAP);
 	float tileWidth = static_cast<float>(mTerrainMapSize.x) / static_cast<float>(heightMapInfo.width);
@@ -170,6 +185,7 @@ void Terrain::CreateTerrainMeshMap() {
 	float left = (-mTerrainMapSize.x / 2.f);
 	float bottom = (-mTerrainMapSize.y / 2.f);
 	glm::vec3 terrainNorm{ 0.f, 1.f, 0.f };
+	mTileSize = { tileWidth, tileHeight };
 
 	// xz평면 상에 지형을 그려줄 삼각형 리스트 정점 생성
 	for (unsigned int z = 0; z < heightMapInfo.height; ++z) {
@@ -199,6 +215,11 @@ void Terrain::CreateTerrainMeshMap() {
 				glm::vec2{ static_cast<float>(x + 1) / heightMapInfo.width, static_cast<float>(z + 1) / heightMapInfo.height }
 			};
 
+			p0.position.y = GetHeight(p0.position.x, p0.position.z, 0.0f);
+			p1.position.y = GetHeight(p1.position.x, p1.position.z, 0.0f);
+			p2.position.y = GetHeight(p2.position.x, p2.position.z, 0.0f);
+			p3.position.y = GetHeight(p3.position.x, p3.position.z, 0.0f);
+
 			// Triangle 1: p0 -> p2 -> p1
 			m_verticies.push_back(p0);
 			m_verticies.push_back(p2);
@@ -210,4 +231,5 @@ void Terrain::CreateTerrainMeshMap() {
 			m_verticies.push_back(p3);
 		}
 	}
+
 }

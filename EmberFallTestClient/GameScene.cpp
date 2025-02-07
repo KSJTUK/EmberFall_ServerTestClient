@@ -17,7 +17,7 @@ GameScene::GameScene(std::shared_ptr<Window> mainWindow)
     : mMainWindow{ mainWindow }, mMainTimer{ std::make_unique<GameTimer>() },
     mCamera{ std::make_shared<Camera>(mMainWindow, SimpleMath::Vector3{ 0.0f, 1.0f, 0.0f }, SimpleMath::Vector3{ 0.0f, 0.0f, -1.0f }) } {
 
-    mTerrain = std::make_unique<Terrain>(glm::vec2{ 257.0f, 257.0f });
+    mTerrain = std::make_unique<Terrain>(glm::vec2{ 1000.0f, 1000.0f });
 
     auto mainShader = std::make_shared<Shader>(static_shader);
 
@@ -42,10 +42,11 @@ GameScene::GameScene(std::shared_ptr<Window> mainWindow)
     mObjects.emplace_back(obj);
     mainShader->RegisterRenderingObject({ obj });
 
-    float dist{ 20.0f };
-    for (int i = 0; i < 1000; ++i) { // 10 * 10 * 10, 10.0f
-        SimpleMath::Vector3 distFromOrigin{ dist * (i % 10), dist * (i / 10 % 10), dist * (i / 100) };
-        distFromOrigin = SimpleMath::Vector3{ -100.0f, -100.0f, -100.0f } + distFromOrigin;
+    float dist{ 10.0f };
+    for (int i = 0; i < 10000; ++i) { // 10 * 10 * 10, 10.0f
+        SimpleMath::Vector3 distFromOrigin{ dist * (i % 100), 0.0f, dist * (i / 100) };
+        distFromOrigin = SimpleMath::Vector3{ -500.0f, 0.0f, -500.0f } + distFromOrigin;
+        distFromOrigin.y = mTerrain->GetHeight(distFromOrigin.x, distFromOrigin.z, 0.5f);
         auto newObj = obj->Clone();
         newObj->SetPosition(distFromOrigin);
         obj->SetColor(SimpleMath::Vector3::Zero);
