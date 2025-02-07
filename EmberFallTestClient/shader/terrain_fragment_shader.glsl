@@ -13,8 +13,15 @@ struct Meterials {
 
 uniform Meterials meterials;
 
+uniform int textured;
+uniform vec3 terrainColor;
+
 void main(void)
 {
-	fragColor = vec4(vec3(texture(meterials.heightMapTexture, texCoord)), 1.0f);
+	if (1 == textured) {
+		fragColor = vec4(vec3(texture(meterials.heightMapTexture, texCoord)), 1.0f);
+	} else {
+		fragColor = vec4(terrainColor, 1.0f);
+	}
 //	fragColor = vec4(tes_out_normal, 1.0f);
 }

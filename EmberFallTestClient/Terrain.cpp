@@ -158,6 +158,8 @@ void Terrain::Render(const std::shared_ptr<Camera>& camera) {
 	mTerrainShader->UseProgram();
 	SetMeterials();
 	
+	mTerrainShader->SetUniformInt("textured", static_cast<INT32>(mTextured));
+	mTerrainShader->SetUniformVec3("terrainColor", ConvertVec3(mColor));
 	mTerrainShader->SetUniformVec3("viewPosition", ConvertVec3(camera->GetPosition()));
 	mTerrainShader->SetUniformMat4("projection", GL_FALSE, camera->GetProjMat());
 	mTerrainShader->SetUniformMat4("view", GL_FALSE, camera->GetViewMat());
@@ -176,6 +178,14 @@ float Terrain::GetHeight(const float x, const float y, const float offset) const
 
 	float pixel = mHeightMap->GetPixel(idxX, idxZ);
 	return pixel * mYScale + offset;
+}
+
+void Terrain::SetTextured(bool textured) {
+	mTextured = textured;
+}
+
+void Terrain::SetColor(const SimpleMath::Vector3& color) {
+	mColor = color;
 }
 
 void Terrain::CreateTerrainMeshMap() {

@@ -65,6 +65,9 @@ public:
 	void Render(const std::shared_ptr<class Camera>& camera);
 	float GetHeight(const float x, const float y, const float offset) const;
 
+	void SetTextured(bool textured);
+	void SetColor(const SimpleMath::Vector3& color);
+
 private:
 	void CreateTerrainMeshMap();
 
@@ -83,5 +86,8 @@ private:
 
 	std::shared_ptr<HeightMap> mHeightMap{ };
 		
-	const float mYScale{ 0.5f };
+	const float mYScale{ 0.0f };
+	
+	bool mTextured{ false };
+	SimpleMath::Vector3 mColor{ SimpleMath::Vector3{ 0.0f, 1.0f, 0.0f } };
 };

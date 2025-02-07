@@ -42,9 +42,9 @@ GameScene::GameScene(std::shared_ptr<Window> mainWindow)
     mObjects.emplace_back(obj);
     mainShader->RegisterRenderingObject({ obj });
 
-    float dist{ 10.0f };
-    for (int i = 0; i < 10000; ++i) { // 10 * 10 * 10, 10.0f
-        SimpleMath::Vector3 distFromOrigin{ dist * (i % 100), 0.0f, dist * (i / 100) };
+    float dist{ 100.0f };
+    for (int i = 0; i < 100; ++i) { // 10 * 10 * 10, 10.0f
+        SimpleMath::Vector3 distFromOrigin{ dist * (i % 10), 0.0f, dist * (i / 10) };
         distFromOrigin = SimpleMath::Vector3{ -500.0f, 0.0f, -500.0f } + distFromOrigin;
         distFromOrigin.y = mTerrain->GetHeight(distFromOrigin.x, distFromOrigin.z, 0.5f);
         auto newObj = obj->Clone();
