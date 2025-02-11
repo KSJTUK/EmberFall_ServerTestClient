@@ -30,7 +30,7 @@ GameScene::GameScene(std::shared_ptr<Window> mainWindow)
     globalLight->SetLinearQuadrant(0.0f, 0.0f);
     mainShader->RegisterLights({ pointLight, globalLight });
 
-    auto player = std::make_shared<GameObject>(std::make_shared<Model>("object/cube.obj"), glm::vec3{ 0.0f, 0.0f, 0.0f });
+    auto player = std::make_shared<GameObject>(std::make_shared<Model>("object/cube.obj", "textures/container.jpg"), glm::vec3{0.0f, 0.0f, 0.0f});
 
     auto cube = std::make_shared<Model>("object/cube.obj");
     pointLight->SetModel(cube);

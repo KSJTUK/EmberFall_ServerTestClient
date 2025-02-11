@@ -12,7 +12,7 @@ public:
     void Render();
 
 private:
-    std::array<std::shared_ptr<class GameObject>, 3> mObjects{ };
+    std::array<std::shared_ptr<class GameObject>, 200> mObjects{ };
 
     std::shared_ptr<class Window> mMainWindow{ };
 
