@@ -17,6 +17,10 @@ GameObject::GameObject(std::shared_ptr<class Model> model, glm::vec3 position, g
 
 GameObject::~GameObject() { }
 
+void GameObject::SetActive(bool active) {
+    mActive = active;
+}
+
 void GameObject::InitId(SessionIdType id) {
     mId = id;
 }
@@ -85,6 +89,10 @@ void GameObject::BindingTexture() {
 }
 
 void GameObject::Update(const float deltaTime) { 
+    if (not mActive) {
+        return;
+    }
+
     for (auto& component : mComponents) {
         component->Update(deltaTime, *this);
     }
@@ -116,7 +124,7 @@ std::shared_ptr<GameObject> GameObject::Clone() const {
 }
 
 void GameObject::Render() {
-    if (nullptr == mModel) {
+    if (nullptr == mModel or false == mActive) {
         return;
     }
 

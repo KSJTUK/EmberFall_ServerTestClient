@@ -26,7 +26,7 @@ void InputComponent::Update(const float deltaTime, GameObject& obj) {
             -DirectX::XM_PIDIV2 + 1.0f,
             DirectX::XM_PIDIV2 - 1.0f);
 
-        cameraRotate = SimpleMath::Quaternion::CreateFromYawPitchRoll(yaw, pitch, 0.0f);
+        cameraRotate = SimpleMath::Quaternion::CreateFromYawPitchRoll(yaw, 0.0f, 0.0f);
         //cameraRotate = SimpleMath::Quaternion::CreateFromAxisAngle(
         //    SimpleMath::Vector3::Up, rotAngle.x);
         //cameraRotate = SimpleMath::Quaternion::CreateFromAxisAngle(

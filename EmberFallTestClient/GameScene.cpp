@@ -37,20 +37,10 @@ GameScene::GameScene(std::shared_ptr<Window> mainWindow)
         
     mPlayers.emplace(player->GetId(), player); // dummy
 
-    auto obj = std::make_shared<GameObject>(std::make_shared<Model>("object/cube.obj", "textures/container.jpg"), glm::vec3{0.0f, 0.0f, 0.0f});
-    obj->CreateComponent<TestComponent>();
-    mObjects.emplace_back(obj);
-    mainShader->RegisterRenderingObject({ obj });
-
-    float dist{ 100.0f };
-    for (int i = 0; i < 100; ++i) { // 10 * 10 * 10, 10.0f
-        SimpleMath::Vector3 distFromOrigin{ dist * (i % 10), 0.0f, dist * (i / 10) };
-        distFromOrigin = SimpleMath::Vector3{ -500.0f, 0.0f, -500.0f } + distFromOrigin;
-        distFromOrigin.y = mTerrain->GetHeight(distFromOrigin.x, distFromOrigin.z, 0.5f);
-        auto newObj = obj->Clone();
-        newObj->SetPosition(distFromOrigin);
-        obj->SetColor(SimpleMath::Vector3::Zero);
-        mObjects.push_back(newObj);
+    auto objOrigin = std::make_shared<GameObject>(std::make_shared<Model>("object/cube.obj"), glm::vec3{0.0f, 0.0f, 0.0f});
+    mainShader->RegisterRenderingObject({ objOrigin });
+    for (auto& obj : mObjects) {
+        obj = objOrigin->Clone();
     }
 
     mainShader->SetCamera(mCamera);
@@ -86,9 +76,9 @@ void GameScene::ProcessPackets(const std::shared_ptr<ClientCore>& core) {
             mShaders["mainShader"]->RegisterRenderingObject(mPlayers[myId]);
             break;
 
-        case PacketType::PT_GAMEOBJ_SC:
+        case PacketType::PT_PLAYER_INFO_SC:
             {
-                PacketGameObj objPacket{ };
+                PacketPlayerInfoSC objPacket{ };
                 buffer.Read(objPacket); 
                 auto it = mPlayers.find(header.id);
                 if (it == mPlayers.end()) {
@@ -104,8 +94,21 @@ void GameScene::ProcessPackets(const std::shared_ptr<ClientCore>& core) {
             }
             break;
 
+        case PacketType::PT_GAME_OBJECT_SC:
+            {
+                PacketGameObject objPacket{ };
+                buffer.Read(objPacket);
+                auto object = mObjects[objPacket.objectId];
+                object->SetActive(objPacket.state);
+                object->SetColor(objPacket.color);
+                object->SetPosition(objPacket.position);
+                object->SetRotation(objPacket.rotation);
+                object->Scale(objPacket.scale);
+            }
+            break;
+
         default:
-            std::cout << "PACKET ERROR Size:" << static_cast<INT32>(header.size) << " PacketType: " << static_cast<INT32>(header.type) << std::endl;
+            gLogConsole->PushLog(DebugLevel::LEVEL_WARNING, "PacketError Size: {}, Type: {}", header.size, header.type);
             break;
         }
     }
@@ -137,7 +140,7 @@ void GameScene::SendUpdateResult(const std::shared_ptr<ClientCore>& core) {
         core->Send(&inputPacket);
     }
 
-    PacketGameObjCS game{ sizeof(PacketGameObjCS), PacketType::PT_GAMEOBJ_CS, core->GetSessionId() };
+    PacketPlayerInfoCS game{ sizeof(PacketPlayerInfoCS), PacketType::PT_PLAYER_INFO_CS, core->GetSessionId() };
     game.rotation = mPlayers[myId]->GetTransform().GetRotation();
     core->Send(&game);
 #endif

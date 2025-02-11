@@ -10,6 +10,7 @@ public:
     ~GameObject();
 
 public:
+    void SetActive(bool active);
     void InitId(SessionIdType id);
     SessionIdType GetId() const;
     Transform& GetTransform();
@@ -42,6 +43,7 @@ public:
 
 private:
     SessionIdType mId{ INVALID_SESSION_ID };
+    bool mActive{ true };
     bool mTextured{ false };
     bool mLightObj{ false };
     SimpleMath::Vector3 mColor{ 1.0f, 1.0f, 1.0f };

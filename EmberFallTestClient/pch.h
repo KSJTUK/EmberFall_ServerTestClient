@@ -15,6 +15,7 @@
 
 #include "../External/Include/ServerLib/pch.h"
 #include "../External/Include/ServerLib/NetworkCore.h"
+#include "../External/Include/ServerLib/PacketHandler.h"
 #ifdef _DEBUG
 #pragma comment(lib, "../External/Lib/ServerLib/debug/ServerLib.lib")
 #else
