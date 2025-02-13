@@ -38,12 +38,16 @@ void Camera::Update(float deltaTime, const SimpleMath::Vector3& position, const 
 
     mEye = position + offset;
 
-	if (false == IsVector3Zero(look)) {
+	if (false == MathUtil::IsVectorZero(look)) {
         mAt = look;
 		mAt.Normalize();
-	//	UpdateBasisAxis();
+		UpdateBasisAxis();
 	}
 
+	if (gMouse) {
+		gLogConsole->PushLog(DebugLevel::LEVEL_INFO, "look: {} {} {}", look.x, look.y, look.z);
+		gLogConsole->PushLog(DebugLevel::LEVEL_INFO, "At: {} {} {}", mAt.x, mAt.y, mAt.z);
+	}
 	mView = ConvertDXMatToGLMat(DirectX::XMMatrixLookAtRH(mEye, mEye + mAt, SimpleMath::Vector3::Up));
 }
 

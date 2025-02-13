@@ -102,7 +102,7 @@ void GameObject::Update(const float deltaTime) {
         mCamera->Update(deltaTime,
             mTransform.GetPosition(),
             mTransform.GetLook(),
-            SimpleMath::Vector3{ 0.0f, 0.5f, 0.0f } * mTransform.GetScale()
+            SimpleMath::Vector3::Transform((SimpleMath::Vector3{ 0.0f, 1.5f, 3.0f } * mTransform.GetScale()), mTransform.GetRotation())
         ); // temp
     }
 }

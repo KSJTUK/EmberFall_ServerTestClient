@@ -70,6 +70,7 @@ void GameScene::ProcessPackets(const std::shared_ptr<ClientCore>& core) {
             myId = header.id;
 
             mPlayers[myId] = mPlayers[255];
+            mPlayers.erase(255);
             mPlayers[myId]->ResetCamera(mCamera);
             mPlayers[myId]->CreateComponent<InputComponent>();
             mPlayers[myId]->SetColor(SimpleMath::Vector3{ RAND_COLOR, RAND_COLOR, RAND_COLOR });
@@ -119,7 +120,6 @@ void GameScene::Update() {
     mMainTimer->Update();
 
     const float deltaTime = mMainTimer->GetDeltaTime();
-    mCamera->Update(deltaTime);
     for (auto& [id, obj] : mPlayers) {
         obj->Update(deltaTime);
     }

@@ -53,6 +53,8 @@ inline constexpr UINT32 INVALID_PROGRAM_ID = std::numeric_limits<UINT32>::max();
 const std::string EMPTYSTRING{ };
 const std::string SHADER_DIR{ "./Shader/" };
 
+inline bool gMouse{ false };
+
 inline glm::mat4 identity{  1.0f, 0.0f, 0.0f, 0.0f,
                             0.0f, 1.0f, 0.0f, 0.0f,
                             0.0f, 0.0f, 1.0f, 0.0f,
@@ -83,7 +85,10 @@ struct Vertex {
 inline glm::mat4 ConvertDXMatToGLMat(const SimpleMath::Matrix& mat)
 {
     glm::mat4 glMat{ };
-    ::memcpy(&glMat, &mat, sizeof(SimpleMath::Matrix));
+    glMat[0][0] = mat._11; glMat[0][1] = mat._12; glMat[0][2] = mat._13; glMat[0][3] = mat._14;
+    glMat[1][0] = mat._21; glMat[1][1] = mat._22; glMat[1][2] = mat._23; glMat[1][3] = mat._24;
+    glMat[2][0] = mat._31; glMat[2][1] = mat._32; glMat[2][2] = mat._33; glMat[2][3] = mat._34;
+    glMat[3][0] = mat._41; glMat[3][1] = mat._42; glMat[3][2] = mat._43; glMat[3][3] = mat._44;
     return glMat;
 }
 
