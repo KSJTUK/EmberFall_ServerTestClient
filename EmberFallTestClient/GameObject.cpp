@@ -102,10 +102,12 @@ void GameObject::Update(const float deltaTime) {
         mCamera->Update(deltaTime,
             mTransform.GetPosition(),
             mTransform.GetLook(),
-            SimpleMath::Vector3::Transform((SimpleMath::Vector3{ 0.0f, 1.5f, 3.0f } * mTransform.GetScale()), mTransform.GetRotation())
+            SimpleMath::Vector3::Transform((SimpleMath::Vector3{ 0.0f, 1.5f, 6.0f } * mTransform.GetScale()), mTransform.GetRotation())
         ); // temp
     }
 }
+
+void GameObject::LateUpdate(const float deltaTime) { }
 
 std::shared_ptr<GameObject> GameObject::Clone() const {
     auto clone = std::make_shared<GameObject>();

@@ -35,7 +35,9 @@ public:
     void ResetShader(std::shared_ptr<class Shader> shader);
     void IsLightObj();
     void BindingTexture();
+
     void Update(const float deltaTime);
+    void LateUpdate(const float deltaTime);
 
     std::shared_ptr<GameObject> Clone() const;
 

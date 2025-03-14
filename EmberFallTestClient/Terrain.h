@@ -86,7 +86,7 @@ private:
 
 	std::shared_ptr<HeightMap> mHeightMap{ };
 		
-	const float mYScale{ 0.0f };
+	const float mYScale{ 0.1f };
 	
 	bool mTextured{ true };
 	SimpleMath::Vector3 mColor{ SimpleMath::Vector3{ 0.0f, 1.0f, 0.0f } };

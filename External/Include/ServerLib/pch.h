@@ -47,7 +47,6 @@
 
 #include "../External/Include/DirectXTK12/SimpleMath.h"
 
-using namespace std::literals;
 namespace SimpleMath = DirectX::SimpleMath;
 
 #include "LogConsole.h"
@@ -59,3 +58,11 @@ namespace SimpleMath = DirectX::SimpleMath;
 #include "Lock.h"
 #include "Protocol.h"
 #include "NetworkUtils.h"
+
+#include "GameUnits.h"
+#include "GameMath.h"
+
+#include "PacketProcessor.h"
+
+using namespace GameUnitLiterals;
+using namespace std::literals;

@@ -13,9 +13,8 @@ GameFrame::GameFrame()
     glEnable(GL_CULL_FACE);
 
 #ifndef STAND_ALONE
-    mNetworkCore = std::make_shared<ClientCore>();
-    mNetworkCore->Init();
-    if (false == mNetworkCore->Start("127.0.0.1", 7777)) {
+    gNetworkCore->Init();
+    if (false == gNetworkCore->Start("127.0.0.1", 7777)) {
         ::exit(EXIT_FAILURE);
     }
 #endif
@@ -23,7 +22,7 @@ GameFrame::GameFrame()
 
 GameFrame::~GameFrame() {
 #ifndef STAND_ALONE
-    mNetworkCore->End();
+    gNetworkCore->End();
 #endif
 }
 
@@ -34,9 +33,9 @@ void GameFrame::AdvanceFrame() {
 	Input::Clear();
     Input::Update();		
 
-    mScene->ProcessPackets(mNetworkCore);
+    mScene->ProcessPackets();
     mScene->Update();
-    mScene->SendUpdateResult(mNetworkCore);
+    mScene->SendUpdateResult();
     mScene->Render();
 }
 

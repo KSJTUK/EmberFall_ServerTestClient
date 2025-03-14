@@ -46,6 +46,8 @@ struct CubeMapInfo {
     INT32 nrChannel[SIZE]{ };
 };
 
+extern std::shared_ptr<ClientCore> gNetworkCore;
+
 inline constexpr auto MOUSE_SENSITIVE = 0.09f;
 inline constexpr auto EPSILON = std::numeric_limits<float>::epsilon();
 inline constexpr auto EPSOLON_VEC3 = SimpleMath::Vector3{ EPSILON, EPSILON, EPSILON };

@@ -20,7 +20,7 @@
 
 using SessionIdType = BYTE;
 using PacketSizeType = BYTE;
-using NetworkObjectIdType = size_t;
+using NetworkObjectIdType = unsigned short;
 
 using ExtraInfo = std::variant<void*, SOCKET, unsigned long long, HANDLE>;
 
@@ -70,3 +70,9 @@ namespace TypeList {
         using Tail = TypeList<T, Types...>::Tail;
     };
 }
+
+template <typename T, typename... Types>
+inline constexpr bool IsAnyOf = (std::is_same_v<T, Types> || ...);
+
+template <typename T, typename... Types>
+inline constexpr bool IsAllOf = (std::is_same_v<T, Types> and ...);

@@ -46,73 +46,33 @@ GameScene::GameScene(std::shared_ptr<Window> mainWindow)
     mainShader->SetCamera(mCamera);
 
     mShaders.insert(std::make_pair("mainShader", mainShader));
+
+    RegisterPacketProcessFunctions();
 }
 
 GameScene::~GameScene() { }
 
-void GameScene::ProcessPackets(const std::shared_ptr<ClientCore>& core) {
+void GameScene::RegisterPacketProcessFunctions() {
+    mPacketProcessor.RegisterProcessFn(PacketType::PACKET_PROTOCOL_VERSION, [=](PacketHeader* header) { ProcessPacketProtocolVersion(header);  });
+    mPacketProcessor.RegisterProcessFn(PacketType::PACKET_NOTIFY_ID, [=](PacketHeader* header) { ProcessNotifyId(header); });
+    mPacketProcessor.RegisterProcessFn(PacketType::PACKET_PLAYER, [=](PacketHeader* header) { ProcessPlayerPacket(header); });
+    mPacketProcessor.RegisterProcessFn(PacketType::PACKET_OBJECT, [=](PacketHeader* header) { ProcessObjectPacket(header); });
+    mPacketProcessor.RegisterProcessFn(PacketType::PACKET_OBJECT_APPEARED, [=](PacketHeader* header) { ProcessObjectAppeared(header); });
+    mPacketProcessor.RegisterProcessFn(PacketType::PACKET_OBJECT_DISAPPEARED, [=](PacketHeader* header) { ProcessObjectDisappeared(header); });
+    mPacketProcessor.RegisterProcessFn(PacketType::PACKET_OBJECT_DEAD, [=](PacketHeader* header) { ProcessObjectDead(header); });
+    mPacketProcessor.RegisterProcessFn(PacketType::PACKET_RESTORE_HEALTH, [=](PacketHeader* header) { ProcessRestoreHP(header); });
+    mPacketProcessor.RegisterProcessFn(PacketType::PACKET_USE_ITEM, [=](PacketHeader* header) { ProcessUseItem(header); });
+    mPacketProcessor.RegisterProcessFn(PacketType::PACKET_PLAYER_EXIT, [=](PacketHeader* header) { ProcessPlayerExit(header); });
+    mPacketProcessor.RegisterProcessFn(PacketType::PACKET_ATTACKED, [=](PacketHeader* header) { ProcessObjectAttacked(header); });
+    mPacketProcessor.RegisterProcessFn(PacketType::PAKCET_ACQUIRED_ITEM, [=](PacketHeader* header) { ProcessAcquiredItem(header); });
+}
+
+void GameScene::ProcessPackets() {
 #ifndef STAND_ALONE
-    auto myId = core->GetSessionId();
-    auto packetHandler = core->GetPacketHandler();
+    auto packetHandler = gNetworkCore->GetPacketHandler();
     auto& buffer = packetHandler->GetBuffer();
 
-    PacketHeader header{ };
-    while (not buffer.IsReadEnd()) {
-        buffer.Read(header);
-        switch (header.type) {
-        case PacketType::PT_NOTIFYING_ID_SC:
-            {
-                PacketNotifyId id; 
-                buffer.Read(id);
-            }
-            std::cout << std::format("INIT SESSION ID : {}\n", header.id);
-            core->InitSessionId(header.id);
-            myId = header.id;
-
-            mPlayers[myId] = mPlayers[255];
-            mPlayers.erase(255);
-            mPlayers[myId]->ResetCamera(mCamera);
-            mPlayers[myId]->CreateComponent<InputComponent>();
-            mPlayers[myId]->SetColor(SimpleMath::Vector3{ RAND_COLOR, RAND_COLOR, RAND_COLOR });
-            mShaders["mainShader"]->RegisterRenderingObject(mPlayers[myId]);
-            break;
-
-        case PacketType::PT_PLAYER_INFO_SC:
-            {
-                PacketPlayerInfoSC objPacket{ };
-                buffer.Read(objPacket); 
-                auto it = mPlayers.find(header.id);
-                if (it == mPlayers.end()) {
-                    mPlayers[header.id] = mPlayers[myId]->Clone();
-                }
-
-                mPlayers[header.id]->SetPosition(objPacket.position);
-                if (myId != header.id) {
-                    mPlayers[header.id]->SetRotation(objPacket.rotation);
-                }
-                mPlayers[header.id]->Scale(objPacket.scale);
-                mPlayers[header.id]->SetColor(objPacket.color);
-            }
-            break;
-
-        case PacketType::PT_GAME_OBJECT_SC:
-            {
-                PacketGameObject objPacket{ };
-                buffer.Read(objPacket);
-                auto object = mObjects[objPacket.objectId];
-                object->SetActive(objPacket.state);
-                object->SetColor(objPacket.color);
-                object->SetPosition(objPacket.position);
-                object->SetRotation(objPacket.rotation);
-                object->Scale(objPacket.scale);
-            }
-            break;
-
-        default:
-            gLogConsole->PushLog(DebugLevel::LEVEL_WARNING, "PacketError Size: {}, Type: {}", header.size, header.type);
-            break;
-        }
-    }
+    mPacketProcessor.ProcessPackets(buffer);
 #endif
 }
 
@@ -129,20 +89,21 @@ void GameScene::Update() {
     }
 }
 
-void GameScene::SendUpdateResult(const std::shared_ptr<ClientCore>& core) {
+void GameScene::SendUpdateResult() {
 #ifndef STAND_ALONE
-    auto myId = core->GetSessionId();
+    auto myId = gNetworkCore->GetSessionId();
 
-    PacketInput inputPacket{ sizeof(PacketInput), PacketType::PT_INPUT_CS, core->GetSessionId() };
+    PacketCS::PacketKeyInput inputPacket{ sizeof(PacketCS::PacketKeyInput), PacketType::PACKET_KEYINPUT, myId };
     auto& keyList = Input::GetStateChangedKeys();
     for (auto key : keyList) {
-        inputPacket.key = key;
-        core->Send(&inputPacket);
+        inputPacket.key = key.key;
+        inputPacket.down = key.state;
+        gNetworkCore->Send(&inputPacket);
     }
 
-    PacketPlayerInfoCS game{ sizeof(PacketPlayerInfoCS), PacketType::PT_PLAYER_INFO_CS, core->GetSessionId() };
-    game.rotation = mPlayers[myId]->GetTransform().GetRotation();
-    core->Send(&game);
+    PacketCS::PacketCamera game{ sizeof(PacketCS::PacketCamera), PacketType::PACKET_CAMERA, myId };
+    game.look = mPlayers[myId]->GetTransform().GetLook();
+    gNetworkCore->Send(&game);
 #endif
 }
 
@@ -160,4 +121,99 @@ void GameScene::Render() {
     mTerrain->Render(mCamera);
 
     glfwSwapBuffers(mMainWindow->GetWindow());
+}
+
+void GameScene::ProcessNotifyId(PacketHeader* header) {
+    std::cout << std::format("INIT SESSION ID : {}\n", header->id);
+
+    gNetworkCore->InitSessionId(header->id);
+    auto myId = header->id;
+
+    mPlayers[myId] = mPlayers[INVALID_SESSION_ID];
+    mPlayers.erase(INVALID_SESSION_ID);
+    mPlayers[myId]->ResetCamera(mCamera);
+    mPlayers[myId]->CreateComponent<InputComponent>();
+    mPlayers[myId]->SetColor(SimpleMath::Vector3{ RAND_COLOR, RAND_COLOR, RAND_COLOR });
+    mShaders["mainShader"]->RegisterRenderingObject(mPlayers[myId]);
+}
+
+void GameScene::ProcessPacketProtocolVersion(PacketHeader* header) {
+    auto protocolVersion = reinterpret_cast<PacketProtocolVersion*>(header);
+    if (PROTOCOL_VERSION_MAJOR != protocolVersion->major or PROTOCOL_VERSION_MINOR != protocolVersion->minor) {
+        gNetworkCore->CloseSession();
+        //glfwSetWindowShouldClose()
+
+        MessageBox(nullptr, L"ERROR!!!!!\nProtocolVersion Mismatching", L"", MB_OK | MB_ICONERROR);
+        ::exit(0);
+    }
+}
+
+void GameScene::ProcessPlayerPacket(PacketHeader* header) {
+    auto playerPacket = reinterpret_cast<PacketSC::PacketPlayer*>(header);
+    auto myId = gNetworkCore->GetSessionId();
+    auto it = mPlayers.find(header->id);
+    if (it == mPlayers.end()) {
+        mPlayers[header->id] = mPlayers[myId]->Clone();
+    }
+
+    mPlayers[header->id]->SetPosition(playerPacket->position);
+    if (myId != header->id) {
+        //mPlayers[header->id]->SetRotation(objPacket->rotation);
+    }
+}
+
+void GameScene::ProcessObjectPacket(PacketHeader* header) {
+    auto objPacket = reinterpret_cast<PacketSC::PacketObject*>(header);
+
+    auto object = mObjects[objPacket->objId];
+    object->SetPosition(objPacket->position);
+}
+
+void GameScene::ProcessObjectDead(PacketHeader* header) {
+    auto objPacket = reinterpret_cast<PacketSC::PacketObjectDead*>(header);
+    auto object = mObjects[objPacket->objId];
+    object->SetActive(false);
+}
+
+void GameScene::ProcessObjectAppeared(PacketHeader* header) {
+    auto objPacket = reinterpret_cast<PacketSC::PacketObjectAppeared*>(header);
+    auto object = mObjects[objPacket->objId];
+    object->SetActive(true);
+    object->SetPosition(objPacket->position);
+}
+
+void GameScene::ProcessObjectDisappeared(PacketHeader* header) {
+    auto objPacket = reinterpret_cast<PacketSC::PacketObjectDisappeared*>(header);
+    auto object = mObjects[objPacket->objId];
+    object->SetActive(false);
+}
+
+void GameScene::ProcessPlayerExit(PacketHeader* header) {
+    auto exitPacket = reinterpret_cast<PacketSC::PacketObject*>(header);
+
+    if (not mPlayers.contains(header->id)) {
+        return;
+    }
+
+    mPlayers.erase(header->id);
+}
+
+void GameScene::ProcessAcquiredItem(PacketHeader* header) {
+    auto acquirePacket = reinterpret_cast<PacketSC::PacketAcquireItem*>(header);
+    // TODO...
+}
+
+void GameScene::ProcessObjectAttacked(PacketHeader* header) {
+    auto attackedPacket = reinterpret_cast<PacketSC::PacketAttacked*>(header);
+    // TODO...
+}
+
+void GameScene::ProcessUseItem(PacketHeader* header) {
+    auto useItemPacket = reinterpret_cast<PacketSC::PacketUseItem*>(header);
+    // TODO...
+}
+
+void GameScene::ProcessRestoreHP(PacketHeader* header) {
+    auto restoreHPPacket = reinterpret_cast<PacketSC::PacketRestoreHP*>(header);
+    // TODO...
 }

@@ -13,6 +13,5 @@ public:
 
 private:
     std::shared_ptr<class Window> mMainWindow{ };
-    std::shared_ptr<class ClientCore> mNetworkCore{ };
     std::unique_ptr<class GameScene> mScene{ };
 };

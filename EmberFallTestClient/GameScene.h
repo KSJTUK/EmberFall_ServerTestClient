@@ -6,12 +6,29 @@ public:
     ~GameScene();
 
 public:
-    void ProcessPackets(const std::shared_ptr<ClientCore>& core);
+    void RegisterPacketProcessFunctions();
+    void ProcessPackets();
     void Update();
-    void SendUpdateResult(const std::shared_ptr<ClientCore>& core);
+    void SendUpdateResult();
     void Render();
 
 private:
+    void ProcessNotifyId(PacketHeader* header);
+    void ProcessPacketProtocolVersion(PacketHeader* header);
+    void ProcessPlayerPacket(PacketHeader* header);
+    void ProcessObjectPacket(PacketHeader* header);
+    void ProcessObjectDead(PacketHeader* header);
+    void ProcessObjectAppeared(PacketHeader* header);
+    void ProcessObjectDisappeared(PacketHeader* header);
+    void ProcessPlayerExit(PacketHeader* header);
+    void ProcessAcquiredItem(PacketHeader* header);
+    void ProcessObjectAttacked(PacketHeader* header);
+    void ProcessUseItem(PacketHeader* header);
+    void ProcessRestoreHP(PacketHeader* header);
+
+private:
+    ClientPacketProcessor mPacketProcessor{ };
+
     std::array<std::shared_ptr<class GameObject>, 200> mObjects{ };
 
     std::shared_ptr<class Window> mMainWindow{ };

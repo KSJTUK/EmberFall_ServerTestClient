@@ -41,6 +41,7 @@ public:
     void Scale(const SimpleMath::Vector3& v);
 
     void Update();
+    void LateUpdate();
 
 private:
     SimpleMath::Vector3 mPosition{ SimpleMath::Vector3::Zero };
