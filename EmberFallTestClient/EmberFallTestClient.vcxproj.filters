@@ -77,9 +77,6 @@
     <ClCompile Include="stbi_image.cpp">
       <Filter>External</Filter>
     </ClCompile>
-    <ClCompile Include="..\External\Include\DirectXTK12\SimpleMath.cpp">
-      <Filter>External</Filter>
-    </ClCompile>
     <ClCompile Include="Window.cpp">
       <Filter>Frame</Filter>
     </ClCompile>
@@ -97,6 +94,9 @@
     </ClCompile>
     <ClCompile Include="Terrain.cpp">
       <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\External\Include\DirectXTK12\SimpleMath.cpp">
+      <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

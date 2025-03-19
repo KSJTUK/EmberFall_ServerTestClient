@@ -53,7 +53,11 @@ GameScene::GameScene(std::shared_ptr<Window> mainWindow)
 GameScene::~GameScene() { }
 
 void GameScene::RegisterPacketProcessFunctions() {
-    mPacketProcessor.RegisterProcessFn(PacketType::PACKET_PROTOCOL_VERSION, [=](PacketHeader* header) { ProcessPacketProtocolVersion(header);  });
+    mPacketProcessor.RegisterProcessFn(
+        PacketType::PACKET_PROTOCOL_VERSION,
+        [=](PacketHeader* header) { ProcessPacketProtocolVersion(header);  
+    });
+
     mPacketProcessor.RegisterProcessFn(PacketType::PACKET_NOTIFY_ID, [=](PacketHeader* header) { ProcessNotifyId(header); });
     mPacketProcessor.RegisterProcessFn(PacketType::PACKET_PLAYER, [=](PacketHeader* header) { ProcessPlayerPacket(header); });
     mPacketProcessor.RegisterProcessFn(PacketType::PACKET_OBJECT, [=](PacketHeader* header) { ProcessObjectPacket(header); });
@@ -70,7 +74,7 @@ void GameScene::RegisterPacketProcessFunctions() {
 void GameScene::ProcessPackets() {
 #ifndef STAND_ALONE
     auto packetHandler = gNetworkCore->GetPacketHandler();
-    auto& buffer = packetHandler->GetBuffer();
+    decltype(auto) buffer = packetHandler->GetBuffer();
 
     mPacketProcessor.ProcessPackets(buffer);
 #endif
@@ -139,7 +143,8 @@ void GameScene::ProcessNotifyId(PacketHeader* header) {
 
 void GameScene::ProcessPacketProtocolVersion(PacketHeader* header) {
     auto protocolVersion = reinterpret_cast<PacketProtocolVersion*>(header);
-    if (PROTOCOL_VERSION_MAJOR != protocolVersion->major or PROTOCOL_VERSION_MINOR != protocolVersion->minor) {
+    if (PROTOCOL_VERSION_MAJOR != protocolVersion->major or
+        PROTOCOL_VERSION_MINOR != protocolVersion->minor) {
         gNetworkCore->CloseSession();
         //glfwSetWindowShouldClose()
 
